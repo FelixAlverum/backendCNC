@@ -27,6 +27,10 @@ public class SerialAPI {
      * Flow Control: Xon/Xoff
      *
      * TODO add jSerialComm to externalJARs; download from https://fazecast.github.io/jSerialComm/
+     *
+     * Interessant:
+     * http://www.codeplastic.com/2017/06/05/g-code-with-processing-part-1/
+     * https://winder.github.io/ugs_website/
      */
 
     private SerialPort cncPort;
