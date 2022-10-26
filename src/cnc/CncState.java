@@ -3,15 +3,8 @@ package cnc;
 public class CncState {
 
      // Gerneral Info
-    /**
-     * Are you connected to a CNC router
-     */
-    public static boolean connected;
-    /**
-     * Is the CNC executing a program?
-     * Vielleicht ändern in String status --> mögliche Zustände sind: stopp, error, werkzeug_wechsel, pausiert, ausfuehrend, abgeschlossen
-     */
-    public static boolean running;
+    public enum cnc_state{INIT, CONNECTED, PAUSE, EXECUTING, FINISHED, CHANGE_TOOL, ERROR}
+    public static cnc_state cnc_state;
 
     // Absolute Position
     public static int absolute_X;
