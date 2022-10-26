@@ -1,5 +1,12 @@
 package connection.cnc;
 
+import com.fazecast.jSerialComm.SerialPort;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class SerialAPI {
 
     /**
@@ -19,7 +26,50 @@ public class SerialAPI {
      * Parity: keine
      * Flow Control: Xon/Xoff
      *
-     * https://diymachining.com/g-code-example/
+     * TODO add jSerialComm to externalJARs; download from https://fazecast.github.io/jSerialComm/
      */
+
+    private SerialPort cncPort;
+    public void connectCnc(){
+        /*
+         * TODO Parameter für Ports herausfinden und setzen:
+         * - portDescriptor: Port_#0010.Hub_#0001 (allgemeinere Lösung finden)
+         * - safetySleepTime:
+         * - deviceSendQueueSize:
+         * - deviceReceiveQueueSize:
+         */
+        String portDescriptor = "Port_#0010.Hub_#0001";
+        int safetySleepTime = 10;
+        int deviceSendQueueSize = 10;
+        int deviceReceiveQueueSize = 10;
+
+        cncPort = SerialPort.getCommPort(portDescriptor);
+        if(cncPort.openPort(safetySleepTime,deviceSendQueueSize,deviceReceiveQueueSize)==false){
+            System.out.println("Can't open port.");
+        }
+
+    }
+
+    /**
+     * Send gCode File to the CNC
+     * @param gCode Path to the gCode File
+     * @throws IOException
+     */
+    public void sendFile(Path gCode) throws IOException {
+        byte[] buffer = Files.readAllBytes(gCode);
+        long bytesToWrite = buffer.length;
+
+        // TODO falls unterbrochen wird (Werkzeugwechsel, Programmabbruch) darüber wieder einsteigen
+        long offset = 0;
+
+        cncPort.writeBytes(buffer, bytesToWrite, offset);
+    }
+
+    /**
+     * Send a single gCode Instrucion to CNC
+     */
+    public void sendInstruction(){
+        //TODO keine Ahnung wie das umgesetzt wird
+    }
 
 }

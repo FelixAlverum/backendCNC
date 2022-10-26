@@ -1,25 +1,11 @@
-package cnc_instructions;
+package cnc.cnc_instructions;
 
 public class Instructions {
 
     /**
-     * fahre in X Richtung
+     * fahre in Achsenrichtung Richtung
      */
-    public void goX(){
-
-    }
-
-    /**
-     * fahre in Y Richtung
-     */
-    public void goY(){
-
-    }
-
-    /**
-     * fahre in Z Richtung
-     */
-    public void goZ(){
+    public void moveAxis(String axis, int millimeter){
 
     }
 

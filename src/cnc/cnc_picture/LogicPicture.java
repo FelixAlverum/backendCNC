@@ -1,4 +1,4 @@
-package cnc_picture;
+package cnc.cnc_picture;
 
 public class LogicPicture {
 }
