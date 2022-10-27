@@ -3,7 +3,7 @@ package cnc;
 public class CncState {
 
      // Gerneral Info
-    public enum cnc_state{INIT, CONNECTED, PAUSE, EXECUTING, FINISHED, CHANGE_TOOL, ERROR}
+    public enum cnc_state{DISCONNECTED ,INIT, CONNECTED, PAUSE, EXECUTING, FINISHED, CHANGE_TOOL, ERROR}
     public static cnc_state cnc_state;
 
     // Absolute Position

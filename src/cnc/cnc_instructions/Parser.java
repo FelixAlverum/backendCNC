@@ -1,6 +1,6 @@
 package cnc.cnc_instructions;
 
-public class parser {
+public class Parser {
     /**
      * GCode in den VHS CNC Code übersetzen
      */

@@ -105,7 +105,21 @@ public class SerialAPI implements SerialPortDataListener {
         if(serialPort != null){
             serialPort.removeDataListener();
             serialPort.closePort();
+
+            CncState.cnc_state = CncState.cnc_state.DISCONNECTED;
         }
+    }
+
+    public void sendByteImmediately(byte b) throws Exception {
+        serialPort.writeBytes(new byte[]{b}, 1);
+    }
+
+    public void sendStringToComm(String command) throws Exception {
+        serialPort.writeBytes(command.getBytes(), command.length());
+    }
+
+    public boolean isOpen() {
+        return serialPort.isOpen();
     }
 
     @Override
