@@ -1,0 +1,21 @@
+Hey Jungs hier würde ich Links, Infos und Todos zu unserem Projekt zwischenspeichern. Das macht am Ende die Dokumentation und Ressourcensuche deutlich leichter :)
+
+TODOs:
+- JAR der Frontend Gruppe bereitstellen um sich mit der CNC verbinden zu können und in Achsenrichtung zu fahren
+- Wie simulieren wir einen seriellen Port um die serielle Schnittstelle zu testen wenn wir nicht an der CNC Maschine sind???
+- Wie simulieren wir den generierten G-Code um zu erkennen was wir eigentlich fräsen?
+- Allgemeiner G-Code in den spezifischen CNC 580 / CNC 980 vhf parsen
+- Tests für die einzelnen Methoden / Abläufe / Verbindungsaufbau etc. schreiben
+
+Infos:
+1) JARs zum Installieren
+1.1 jSerialComm     https://fazecast.github.io/jSerialComm/
+1.2 commons-lang    https://commons.apache.org/proper/commons-lang/download_lang.cgi
+
+2) Bei einer seriellen Datenübertragung wird die serielle Schnittstelle der Steuerung durch folgende Parameter definiert
+(parameterisieren durch übetragen der Initialisierungsdatei)
+* Baudrate: 38400
+* Data Bits: 8
+* Stop Bits: 1
+* Parity: keine
+* Flow Control: Xon/Xoff

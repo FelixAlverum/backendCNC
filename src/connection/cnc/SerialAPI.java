@@ -41,7 +41,7 @@ public class SerialAPI implements SerialPortDataListener {
      * https://github.com/winder/Universal-G-Code-Sender/blob/master/ugs-core/src/com/willwinder/universalgcodesender/connection/JSerialCommConnection.java
      */
 
-    private SerialPort serialPort;
+    public SerialPort serialPort;
 
     /**
      * Open the serial port to the CNC
