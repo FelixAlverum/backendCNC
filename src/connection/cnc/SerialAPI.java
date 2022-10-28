@@ -73,7 +73,7 @@ public class SerialAPI implements SerialPortDataListener {
      */
     public void initPort(String portDescriptor) throws Exception{
         // close ports before init
-        if (serialPort.isOpen() && serialPort != null){
+        if (serialPort != null){
             closePort();
         }
 

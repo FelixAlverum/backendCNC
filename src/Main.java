@@ -20,8 +20,9 @@ public class Main {
                     .map(SerialPort::getSystemPortName)
                     .collect(Collectors.toList()));
 
+            testverbindung.initPort("COM3");
             testverbindung.openPort();
-            testverbindung.initPort("Port_#0010.Hub_#0001");
+
 
 
             // Sende das Testprogramm von vhf an die CNC
@@ -33,7 +34,6 @@ public class Main {
                     "PA120000,-100000,10000;PA120000,0,10000;GA,,-1000;OS2,0;RVS0;T0;");
 
             testverbindung.closePort();
-
             System.out.println("Ende");
 
 
