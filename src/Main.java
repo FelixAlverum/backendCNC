@@ -1,6 +1,10 @@
+import cnc.CncState;
 import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.fazecast.jSerialComm.SerialPortEvent;
 import connection.cnc.SerialAPI;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -9,35 +13,34 @@ public class Main {
         System.out.println("Hello CNC Backend");
 
 
-        try{
-            // Serial Port Simulieren
+        try {
+            // Serial Port Simulieren --> virtual port verwenden
 
+            // ------------------ API testen ------------------
 
-            // API testen
-            SerialAPI testverbindung = new SerialAPI();
-
+            // zeige alle seriellen ports an
             System.out.println(Arrays.stream(SerialPort.getCommPorts())
                     .map(SerialPort::getSystemPortName)
                     .collect(Collectors.toList()));
 
-            testverbindung.initPort("COM3");
-            testverbindung.openPort();
+
+            // verbinde dich mit COM1
+            SerialAPI serialAPI = new SerialAPI();
+            serialAPI.initPort("COM1");
+            serialAPI.openPort();
+
+            // sende daten an die CNC
+            String command = "Hallo ich sende etwas zum test";
+            System.out.println("Sende an CNC: " + command);
+            serialAPI.sendStringToComm(command);
+
+            // empfange daten von der CNC --> sollte ein Event sein
 
 
 
-            // Sende das Testprogramm von vhf an die CNC
-            testverbindung.sendStringToComm("T1;OS2,1;GA0,0;GA0,,-1000;RVS20000;VS5000;PA,,5000;VS50000;PA100000,0,5000;\n" +
-                    "PA100000,-100000,5000;PA0,-100000,5000;PA0,0,5000;VS5000;PA,,10000;VS50000;PA100000,0,10000;\n" +
-                    "PA100000,-100000,10000;PA0,-100000,10000;PA0,0,10000;GA,,-1000;OS2,0;RVS0;T2;OS2,1;GA120000,0;\n" +
-                    "GA0,,-1000;RVS18000;VS5000;PA,,5000;VS30000;PA220000,0,5000;PA220000,-100000,5000;PA120000,-\n" +
-                    "100000,5000;PA120000,0,5000;VS5000;PA,,10000;VS30000;PA220000,0,10000;PA220000,-100000,10000;\n" +
-                    "PA120000,-100000,10000;PA120000,0,10000;GA,,-1000;OS2,0;RVS0;T0;");
+            //serialAPI.closePort();
 
-            testverbindung.closePort();
-            System.out.println("Ende");
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
