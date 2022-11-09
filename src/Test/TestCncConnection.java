@@ -304,6 +304,7 @@ public class TestCncConnection {
             serialAPI.sendStringToComm("P9204=10700;");
             serialAPI.sendStringToComm("P9205=2200;");
 
+            serialAPI.sendStringToComm("!N;RF;");
 
             // Testprogramm
             serialAPI.sendStringToComm("T1;");
