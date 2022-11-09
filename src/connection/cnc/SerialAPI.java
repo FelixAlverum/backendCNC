@@ -114,6 +114,7 @@ public class SerialAPI implements SerialPortDataListener {
     }
 
     public void sendStringToComm(String command) throws Exception {
+        System.out.println("Sende an CNC: " + command);
         serialPort.writeBytes(command.getBytes(), command.length());
     }
 

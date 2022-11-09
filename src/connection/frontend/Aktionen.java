@@ -15,4 +15,12 @@ public class Aktionen {
     public void getPlateSize(){
 
     }
+
+    /* gebe globale Koordinaten an Frontend
+     * Gesamtgröße vom globalen Koordinatensystem max x; max y; max z
+     * Aktuelle pos x;y;z
+     */
+    public void sendCncInfo(){
+
+    }
 }
