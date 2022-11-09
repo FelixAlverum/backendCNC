@@ -198,7 +198,7 @@ public class TestCncConnection {
                     "/ INITIALISIERUNG \\\n" +
                     "!N;RF;";
 
-            serialAPI.sendStringToComm(command);
+            //serialAPI.sendStringToComm(command);
 
             // Initiaisierung -> Globale Parameter
             serialAPI.sendStringToComm("P0010=38400;");
@@ -307,7 +307,11 @@ public class TestCncConnection {
             serialAPI.sendStringToComm("!N;RF;");
 
             // Testprogramm
-            serialAPI.sendStringToComm("T1;");
+
+            for(int i = 1; i < 100; i++)
+            serialAPI.sendStringToComm("?E"+i+";");
+
+            //serialAPI.sendStringToComm("T1;");
             serialAPI.sendStringToComm("OS2,1;");
             serialAPI.sendStringToComm("GA0,0;");
             serialAPI.sendStringToComm("GA0,,-1000;");

@@ -131,7 +131,7 @@ public class SerialAPI implements SerialPortDataListener {
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
 
-        System.out.println("Es wurde ein Event getriggerd. Eventnr.: " + serialPortEvent.getEventType() + "\n");
+        //System.out.println("Es wurde ein Event getriggerd. Eventnr.: " + serialPortEvent.getEventType() + "\n");
 
         try {
             switch (serialPortEvent.getEventType()) {
