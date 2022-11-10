@@ -1,9 +1,12 @@
 package cnc;
 
+import java.util.ArrayList;
+
 public class CncState {
 
-     // Gerneral Info
-    public enum cnc_state{DISCONNECTED ,INIT, CONNECTED, PAUSE, EXECUTING, FINISHED, CHANGE_TOOL, ERROR}
+    // Gerneral Info
+    public enum cnc_state {DISCONNECTED, INIT, CONNECTED, PAUSE, EXECUTING, FINISHED, CHANGE_TOOL, ERROR}
+
     public static cnc_state cnc_state;
 
     // Absolute Position
@@ -24,4 +27,9 @@ public class CncState {
     public static int workpart_width;
     public static int workpart_length;
     public static int workpart_depth;
+
+    // CNC Response Log
+    public static ArrayList<String> cncLOG = new ArrayList<String>();
+    public static boolean incompleteEntry = false;
+    public static int indexLog = 0;
 }

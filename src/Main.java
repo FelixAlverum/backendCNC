@@ -1,3 +1,4 @@
+import cnc.CncState;
 import com.fazecast.jSerialComm.SerialPort;
 import connection.cnc.SerialAPI;
 import java.util.Arrays;
