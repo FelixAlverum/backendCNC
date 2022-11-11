@@ -1,5 +1,6 @@
 package Test;
 
+import cnc.CncState;
 import com.fazecast.jSerialComm.SerialPort;
 import connection.cnc.SerialAPI;
 
@@ -33,8 +34,8 @@ public class TestCncConnection {
 
             // Testprogramm
 
-            for(int i = 1; i < 100; i++)
-            serialAPI.sendStringToComm("?E"+i+";");
+            // for(int i = 1; i < 100; i++)
+            // serialAPI.sendStringToComm("?E"+i+";");
 
             //serialAPI.sendStringToComm("T1;");
             serialAPI.sendStringToComm("OS2,1;");
@@ -81,6 +82,12 @@ public class TestCncConnection {
             serialAPI.sendStringToComm("OS2,0;");
             serialAPI.sendStringToComm("RVS0;");
             serialAPI.sendStringToComm("T0;");
+
+
+            Thread.sleep(7 *1000);
+            for (String s:CncState.cncLOG) {
+                System.out.println("CncState.cncLOG " + s);
+            }
 
             //serialAPI.closePort();
 

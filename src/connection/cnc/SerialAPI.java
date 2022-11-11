@@ -117,7 +117,7 @@ public class SerialAPI implements SerialPortDataListener {
     }
 
     public void sendStringToComm(String command) throws Exception {
-        System.out.println("Sende an CNC: " + command);
+        System.out.print("\nSende an CNC: " + command);
         serialPort.writeBytes(command.getBytes(), command.length());
     }
 
@@ -177,10 +177,10 @@ public class SerialAPI implements SerialPortDataListener {
         for(i = CncState.indexLog; i < CncState.cncLOG.size(); i++){
             String entry = CncState.cncLOG.get(i);
             if(entry.matches("(E\\d\\d;)|(E\\d;)")){
-                throw new Exception("LOL");
+                throw new Exception(findExceptionstring(CncState.cncLOG.get(i)));
             }
 
-            System.out.println(entry);
+            //System.out.println(entry);
         }
         // Abgeschlossen
         CncState.indexLog = CncState.cncLOG.size();
@@ -195,6 +195,7 @@ public class SerialAPI implements SerialPortDataListener {
         String[] cncResponses = data.split(";");
 
         for (int i = 0; i < cncResponses.length; i++) {
+            System.out.println(i + " : '"+ cncResponses[i]+"'");
 
             // Prüfe ob der erste Datensatz aus cncResponses zu dem letzten Datensatz aus LOG gehört
             if (CncState.incompleteEntry) {
@@ -213,7 +214,7 @@ public class SerialAPI implements SerialPortDataListener {
             }
 
             // Daten in LOG erfassen
-            if (!cncResponses[i].equals(" ")) {
+            if (!cncResponses[i].equals("")) {
                 // Leerzeichen nicht in LOG schreiben
                 CncState.cncLOG.add(cncResponses[i]);
             }
