@@ -40,7 +40,6 @@ import java.util.regex.Pattern;
 public class SerialAPI implements SerialPortDataListener {
 
     private SerialPort serialPort;
-    private String fehlermeldung;
 
     /**
      * Open the serial port to the CNC
@@ -58,10 +57,8 @@ public class SerialAPI implements SerialPortDataListener {
         }
 
         if (serialPort.openPort() == true) {
-            CncState.cnc_state = CncState.cnc_state.INIT;
             return true;
         } else {
-            CncState.cnc_state = CncState.cnc_state.ERROR;
             return false;
         }
     }
@@ -79,11 +76,11 @@ public class SerialAPI implements SerialPortDataListener {
         }
 
         // variables for initialisation
-        //portDescriptor = ";                        // TODO portDescriptor richtig bestimmen
-        int baudrate = 38400;                       // Wert aus moodle entnommen
-        int data_bits = 8;                          // Wert aus moodle entnommen
-        int stop_bits = SerialPort.ONE_STOP_BIT;     // Wert aus moodle entnommen
-        int parity = SerialPort.NO_PARITY;          // Wert aus moodle entnommen
+        //portDescriptor = ";                           // TODO portDescriptor richtig bestimmen
+        int baudrate = 38400;                           // Wert aus moodle entnommen
+        int data_bits = 8;                              // Wert aus moodle entnommen
+        int stop_bits = SerialPort.ONE_STOP_BIT;        // Wert aus moodle entnommen
+        int parity = SerialPort.NO_PARITY;              // Wert aus moodle entnommen
         int flow_control = SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED; // Wert aus moodle entnommen
 
         // init port
@@ -94,8 +91,6 @@ public class SerialAPI implements SerialPortDataListener {
         serialPort.addDataListener(this);
         serialPort.setBaudRate(baudrate);
         serialPort.setFlowControl(flow_control);
-
-        CncState.cnc_state = CncState.cnc_state.CONNECTED;
     }
 
     /**
@@ -107,8 +102,6 @@ public class SerialAPI implements SerialPortDataListener {
         if (serialPort != null) {
             serialPort.removeDataListener();
             serialPort.closePort();
-
-            CncState.cnc_state = CncState.cnc_state.DISCONNECTED;
         }
     }
 
@@ -133,7 +126,6 @@ public class SerialAPI implements SerialPortDataListener {
 
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
-
         //System.out.println("Es wurde ein Event getriggerd. Eventnr.: " + serialPortEvent.getEventType() + "\n");
 
         try {
@@ -174,9 +166,9 @@ public class SerialAPI implements SerialPortDataListener {
 
         //TODO - Auf welche Rückgabewerte der CNC müssen wir reagieren und wie werden die Fehler weitergegeben?
 
-        for(i = CncState.indexLog; i < CncState.cncLOG.size(); i++){
+        for (i = CncState.indexLog; i < CncState.cncLOG.size(); i++) {
             String entry = CncState.cncLOG.get(i);
-            if(entry.matches("(E\\d\\d;)|(E\\d;)")){
+            if (entry.matches("(E\\d\\d;)|(E\\d;)")) {
                 throw new Exception(findExceptionstring(CncState.cncLOG.get(i)));
             }
 
@@ -195,7 +187,7 @@ public class SerialAPI implements SerialPortDataListener {
         String[] cncResponses = data.split(";");
 
         for (int i = 0; i < cncResponses.length; i++) {
-            System.out.println(i + " : '"+ cncResponses[i]+"'");
+            System.out.println(i + " : '" + cncResponses[i] + "'");
 
             // Prüfe ob der erste Datensatz aus cncResponses zu dem letzten Datensatz aus LOG gehört
             if (CncState.incompleteEntry) {
@@ -227,63 +219,159 @@ public class SerialAPI implements SerialPortDataListener {
         }
     }
 
-    private String findExceptionstring(String errorcode){
+    private String findExceptionstring(String errorcode) {
         String exception = "Kein Bekannter Errorcode der CNC: " + errorcode;
-        switch (errorcode){
-            case "E1": exception = errorcode + " unsupported command"; break;
-            case "E2": exception = errorcode + " invalid command"; break;
-            case "E3": exception = errorcode + " command not allowed in this state"; break;
-            case "E4": exception = errorcode + " syntax error"; break;
-            case "E5": exception = errorcode + " invalid feature"; break;
-            case "E6": exception = errorcode + " stopped by user"; break;
-            case "E10": exception = errorcode + " invalid parameter"; break;
-            case "E11": exception = errorcode + " unknown error"; break;
-            case "E12": exception = errorcode + " missing parameter"; break;
-            case "E13": exception = errorcode + " parameter is out of range"; break;
-            case "E14": exception = errorcode + " no customer profile"; break;
-            case "E20": exception = errorcode + " axis not defined"; break;
-            case "E21": exception = errorcode + " axis not combinable"; break;
-            case "E22": exception = errorcode + " axis not referenced"; break;
-            case "E23": exception = errorcode + " no referenzpoint found"; break;
-            case "E24": exception = errorcode + " no measurepoint found"; break;
-            case "E25": exception = errorcode + " axis range ended"; break;
-            case "E26": exception = errorcode + " tool too long"; break;
-            case "E27": exception = errorcode + " tool too short"; break;
-            case "E30": exception = errorcode + " no spindle defined"; break;
-            case "E31": exception = errorcode + " no spindle response"; break;
-            case "E32": exception = errorcode + " spindle input active"; break;
-            case "E40": exception = errorcode + " can not record macro"; break;
-            case "E41": exception = errorcode + " macro too long"; break;
-            case "E42": exception = errorcode + " error in last macro"; break;
-            case "E43": exception = errorcode + " macro not found"; break;
-            case "E50": exception = errorcode + " initial stop"; break;
-            case "E51": exception = errorcode + " external stop"; break;
-            case "E52": exception = errorcode + " power driver stop"; break;
-            case "E53": exception = errorcode + " external spindle stop"; break;
-            case "E54": exception = errorcode + " internal spindle stop"; break;
-            case "E55": exception = errorcode + " hbox stop"; break;
-            case "E56": exception = errorcode + " powerfail stop"; break;
-            case "E57": exception = errorcode + " fpga confdone stop"; break;
-            case "E58": exception = errorcode + " refswitch stop"; break;
-            case "E59": exception = errorcode + " fpga error stop"; break;
-            case "E60": exception = errorcode + " overcurrent spindle stop"; break;
-            case "E61": exception = errorcode + " overload spindle stop"; break;
-            case "E62": exception = errorcode + " wait for input stop"; break;
-            case "E63": exception = errorcode + " unexpected input stop"; break;
-            case "E70": exception = errorcode + " leveloffset too high"; break;
-            case "E71": exception = errorcode + " internal error"; break;
-            case "E72": exception = errorcode + " error opening/reading file"; break;
-            case "E73": exception = errorcode + " no answer from device"; break;
-            case "E74": exception = errorcode + " error while loading fpga"; break;
-            case "E75": exception = errorcode + " update not feasible"; break;
-            case "E76": exception = errorcode + " update failed"; break;
-            case "E77": exception = errorcode + " wait for input failed"; break;
+        switch (errorcode) {
+            case "E1":
+                exception = errorcode + " unsupported command";
+                break;
+            case "E2":
+                exception = errorcode + " invalid command";
+                break;
+            case "E3":
+                exception = errorcode + " command not allowed in this state";
+                break;
+            case "E4":
+                exception = errorcode + " syntax error";
+                break;
+            case "E5":
+                exception = errorcode + " invalid feature";
+                break;
+            case "E6":
+                exception = errorcode + " stopped by user";
+                break;
+            case "E10":
+                exception = errorcode + " invalid parameter";
+                break;
+            case "E11":
+                exception = errorcode + " unknown error";
+                break;
+            case "E12":
+                exception = errorcode + " missing parameter";
+                break;
+            case "E13":
+                exception = errorcode + " parameter is out of range";
+                break;
+            case "E14":
+                exception = errorcode + " no customer profile";
+                break;
+            case "E20":
+                exception = errorcode + " axis not defined";
+                break;
+            case "E21":
+                exception = errorcode + " axis not combinable";
+                break;
+            case "E22":
+                exception = errorcode + " axis not referenced";
+                break;
+            case "E23":
+                exception = errorcode + " no referenzpoint found";
+                break;
+            case "E24":
+                exception = errorcode + " no measurepoint found";
+                break;
+            case "E25":
+                exception = errorcode + " axis range ended";
+                break;
+            case "E26":
+                exception = errorcode + " tool too long";
+                break;
+            case "E27":
+                exception = errorcode + " tool too short";
+                break;
+            case "E30":
+                exception = errorcode + " no spindle defined";
+                break;
+            case "E31":
+                exception = errorcode + " no spindle response";
+                break;
+            case "E32":
+                exception = errorcode + " spindle input active";
+                break;
+            case "E40":
+                exception = errorcode + " can not record macro";
+                break;
+            case "E41":
+                exception = errorcode + " macro too long";
+                break;
+            case "E42":
+                exception = errorcode + " error in last macro";
+                break;
+            case "E43":
+                exception = errorcode + " macro not found";
+                break;
+            case "E50":
+                exception = errorcode + " initial stop";
+                break;
+            case "E51":
+                exception = errorcode + " external stop";
+                break;
+            case "E52":
+                exception = errorcode + " power driver stop";
+                break;
+            case "E53":
+                exception = errorcode + " external spindle stop";
+                break;
+            case "E54":
+                exception = errorcode + " internal spindle stop";
+                break;
+            case "E55":
+                exception = errorcode + " hbox stop";
+                break;
+            case "E56":
+                exception = errorcode + " powerfail stop";
+                break;
+            case "E57":
+                exception = errorcode + " fpga confdone stop";
+                break;
+            case "E58":
+                exception = errorcode + " refswitch stop";
+                break;
+            case "E59":
+                exception = errorcode + " fpga error stop";
+                break;
+            case "E60":
+                exception = errorcode + " overcurrent spindle stop";
+                break;
+            case "E61":
+                exception = errorcode + " overload spindle stop";
+                break;
+            case "E62":
+                exception = errorcode + " wait for input stop";
+                break;
+            case "E63":
+                exception = errorcode + " unexpected input stop";
+                break;
+            case "E70":
+                exception = errorcode + " leveloffset too high";
+                break;
+            case "E71":
+                exception = errorcode + " internal error";
+                break;
+            case "E72":
+                exception = errorcode + " error opening/reading file";
+                break;
+            case "E73":
+                exception = errorcode + " no answer from device";
+                break;
+            case "E74":
+                exception = errorcode + " error while loading fpga";
+                break;
+            case "E75":
+                exception = errorcode + " update not feasible";
+                break;
+            case "E76":
+                exception = errorcode + " update failed";
+                break;
+            case "E77":
+                exception = errorcode + " wait for input failed";
+                break;
         }
 
         return exception;
     }
 
-    public void initCNC() throws Exception{
+    public void initCNC() throws Exception {
         // Initiaisierung -> Globale Parameter
         sendStringToComm("P0010=38400;");
         sendStringToComm("P0011=1;");

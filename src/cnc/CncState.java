@@ -1,13 +1,10 @@
 package cnc;
 
+import connection.cnc.SerialAPI;
+
 import java.util.ArrayList;
 
 public class CncState {
-
-    // Gerneral Info
-    public enum cnc_state {DISCONNECTED, INIT, CONNECTED, PAUSE, EXECUTING, FINISHED, CHANGE_TOOL, ERROR}
-
-    public static cnc_state cnc_state;
 
     // Absolute Position
     public static int absolute_X;
@@ -20,8 +17,10 @@ public class CncState {
     public static int relative_Z;
 
     // Tool
-    public static String toolEquipped;
+    public static String toolEquipped;      // Wird wahrscheinlich nicht benötigt
     public static boolean toolOn;
+    public static int feed;                 // Vorschub in 1/1000 mm/s
+    public static int rotationalSpeed;      // Drehzahl Umdrehungen/Minuten
 
     // workpart
     public static int workpart_width;
@@ -32,4 +31,7 @@ public class CncState {
     public static ArrayList<String> cncLOG = new ArrayList<String>();
     public static boolean incompleteEntry = false;
     public static int indexLog = 0;
+
+    // CNC Verbindung
+    public static SerialAPI CNC_CONNECTION = new SerialAPI();
 }
