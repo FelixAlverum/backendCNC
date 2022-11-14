@@ -36,17 +36,24 @@ public class Instructions {
      */
     public void goCoordinate(int x, int y, int z) throws Exception {
         String command = "";
-        if (CncState.toolOn == true){
-            command = "PA" + x + "," + y + "," + z + ";";
-        }else {
-            command = "GA" + x + "," + y + "," + z + ";";
+        if (CncState.toolOn == true) {
+            command = "PA" + x + "," + y + ",0;";
+        } else {
+            command = "GA" + x + "," + y + ",0;";
         }
+        CncState.CNC_CONNECTION.sendStringToComm(command);
+
+        if (CncState.toolOn == true) {
+            command = "PA0,0," + z + ";";
+        } else {
+            command = "GA0,0," + z + ";";
+        }
+        CncState.CNC_CONNECTION.sendStringToComm(command);
 
         CncState.absolute_X = x;
         CncState.absolute_Y = y;
         CncState.absolute_Z = z;
 
-        CncState.CNC_CONNECTION.sendStringToComm(command);
     }
 
     /**

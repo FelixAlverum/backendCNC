@@ -28,10 +28,10 @@ public class TestCncConnection {
 
 
             // verbinde dich mit COM1
-            SerialAPI serialAPI = new SerialAPI();
-            serialAPI.initPort("COM4");
-            serialAPI.openPort();
-            serialAPI.initCNC();
+            CncState.CNC_CONNECTION = new SerialAPI();
+            CncState.CNC_CONNECTION.initPort("COM4");
+            CncState.CNC_CONNECTION.openPort();
+            CncState.CNC_CONNECTION.initCNC();
 
             // Testprogramm
             Instructions instructions = new Instructions();
@@ -52,7 +52,7 @@ public class TestCncConnection {
                 System.out.println("CncState.cncLOG " + s);
             }
 
-            //serialAPI.closePort();
+            //CncState.CNC_CONNECTION.closePort();
 
         } catch (Exception e) {
             e.printStackTrace();

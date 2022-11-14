@@ -110,7 +110,7 @@ public class SerialAPI implements SerialPortDataListener {
     }
 
     public void sendStringToComm(String command) throws Exception {
-        System.out.print("\nSende an CNC: " + command);
+        System.out.print("\nSende an CNC: " + command + "\n");
         serialPort.writeBytes(command.getBytes(), command.length());
     }
 
@@ -146,6 +146,8 @@ public class SerialAPI implements SerialPortDataListener {
     }
 
     private void readData() throws Exception {
+        System.out.print("readData \t");
+
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
         InputStream in = serialPort.getInputStream();
 
@@ -477,5 +479,11 @@ public class SerialAPI implements SerialPortDataListener {
         sendStringToComm("P9205=2200;");
 
         sendStringToComm("!N;RF;");
+
+        System.out.println("\n\n\n-----------------------------");
+        System.out.println("-----------------------------");
+        System.out.println("-------- Ende Init ----------");
+        System.out.println("-----------------------------");
+        System.out.println("-----------------------------\n\n\n");
     }
 }
