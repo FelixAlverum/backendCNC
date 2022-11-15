@@ -10,25 +10,27 @@ public class Instructions {
      */
     public void moveAxis(String axis, int mikometer) throws Exception {
         String command = "";
+        int x = CncState.absolute_X,
+                y = CncState.absolute_Y,
+                z = CncState.absolute_Z;
+
         switch (axis.toUpperCase()) {
             case "X":
-                CncState.absolute_X = CncState.absolute_X + mikometer;
-                command = "GA" + CncState.absolute_X + ",,;";
+                x = x + mikometer;
                 break;
             case "Y":
-                CncState.absolute_Y = CncState.absolute_Y + mikometer;
-                command = "GA," + CncState.absolute_Y + ",;";
+                y = y + mikometer;
                 break;
             case "Z":
-                CncState.absolute_Z = CncState.absolute_Z + mikometer;
-                command = "GA,," + CncState.absolute_Z + ";";
+                z = z + mikometer;
                 break;
             default:
                 throw new Exception("Achse: " + axis + " nicht bekannt.");
         }
 
-        CncState.CNC_CONNECTION.sendStringToComm(command);
+        goCoordinate(x, y, z);
     }
+
 
     /**
      * fahre an den Punkt mit den Koordinaten X;Y;Z
@@ -36,6 +38,7 @@ public class Instructions {
      */
     public void goCoordinate(int x, int y, int z) throws Exception {
         String command = "";
+
         if (CncState.toolOn == true) {
             command = "PA" + x + "," + y + ",0;";
         } else {
@@ -44,11 +47,12 @@ public class Instructions {
         CncState.CNC_CONNECTION.sendStringToComm(command);
 
         if (CncState.toolOn == true) {
-            command = "PA0,0," + z + ";";
+            command = "PA,," + z + ";";
         } else {
-            command = "GA0,0," + z + ";";
+            command = "GA,," + z + ";";
         }
         CncState.CNC_CONNECTION.sendStringToComm(command);
+
 
         CncState.absolute_X = x;
         CncState.absolute_Y = y;

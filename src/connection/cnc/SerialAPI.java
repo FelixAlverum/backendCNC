@@ -110,7 +110,7 @@ public class SerialAPI implements SerialPortDataListener {
     }
 
     public void sendStringToComm(String command) throws Exception {
-        System.out.print("\nSende an CNC: " + command + "\n");
+        System.out.println("Sende an CNC: " + command);
         serialPort.writeBytes(command.getBytes(), command.length());
     }
 
@@ -146,8 +146,6 @@ public class SerialAPI implements SerialPortDataListener {
     }
 
     private void readData() throws Exception {
-        System.out.print("readData \t");
-
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
         InputStream in = serialPort.getInputStream();
 
@@ -162,22 +160,22 @@ public class SerialAPI implements SerialPortDataListener {
 
         String data = new String(readData);
         logData(data);
-        in.close();
 
-        System.out.print(data);
+        System.out.println("readData() " + data);
 
         //TODO - Auf welche Rückgabewerte der CNC müssen wir reagieren und wie werden die Fehler weitergegeben?
-
         for (i = CncState.indexLog; i < CncState.cncLOG.size(); i++) {
             String entry = CncState.cncLOG.get(i);
-            if (entry.matches("(E\\d\\d;)|(E\\d;)")) {
+            System.out.println("Entry " + i + ":\t" + CncState.cncLOG.get(i));
+            if (entry.matches("(E\\d\\d)|(E\\d)")) {
+                CncState.indexLog = CncState.cncLOG.size();
                 throw new Exception(findExceptionstring(CncState.cncLOG.get(i)));
             }
-
-            //System.out.println(entry);
         }
         // Abgeschlossen
         CncState.indexLog = CncState.cncLOG.size();
+
+        in.close();
     }
 
     /**
@@ -189,7 +187,6 @@ public class SerialAPI implements SerialPortDataListener {
         String[] cncResponses = data.split(";");
 
         for (int i = 0; i < cncResponses.length; i++) {
-            System.out.println(i + " : '" + cncResponses[i] + "'");
 
             // Prüfe ob der erste Datensatz aus cncResponses zu dem letzten Datensatz aus LOG gehört
             if (CncState.incompleteEntry) {

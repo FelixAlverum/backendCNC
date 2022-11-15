@@ -34,23 +34,22 @@ public class TestCncConnection {
             CncState.CNC_CONNECTION.initCNC();
 
             // Testprogramm
+
             Instructions instructions = new Instructions();
             instructions.goCoordinate(0, 0, 0);               // Zurück zum Nullpunkt
-            instructions.moveAxis("x", 100 * 1000);      // Gehe 100 mm nach rechts
-            instructions.moveAxis("y", 100 * 1000);      // Gehe 100 mm nach vorne
+            instructions.goCoordinate(100000, 0, 0);      // Gehe zu koordinate
+            instructions.goCoordinate(100000, 100000, 0);               // Zurück zum Nullpunkt
+            instructions.moveAxis("x", 10 * 1000);      // Gehe 10 mm nach rechts
+            instructions.moveAxis("y", 10 * 1000);      // Gehe 100 mm nach vorne
             instructions.moveAxis("z", 50 * 1000);       // Gehe 50 mm nach unten
             instructions.goCoordinate(0, 0, 0);               // Zurück zum Nullpunkt
+            instructions.startTool(20000);              // Umdrehungen pro Minute einstellen
+            instructions.setzeVorschub(20 * 1000);                      // Vorschub setzen
+            instructions.goCoordinate(100 * 1000, 100 * 1000, 0);   // Gehe zu einer Koordinate
+            instructions.stopTool();                                    // Spindel ausschalten
+            //*/
 
-            instructions.startTool(20000);
-            Thread.sleep(7 * 1000);
-            instructions.setzeVorschub(20 * 1000);
-            instructions.goCoordinate(100 * 1000, 100 * 1000, 0);
-            instructions.stopTool();
-
-            Thread.sleep(7 * 1000);
-            for (String s : CncState.cncLOG) {
-                System.out.println("CncState.cncLOG " + s);
-            }
+            System.out.println("\n\n\nEnde Testprogramm\n\n\n\n");
 
             //CncState.CNC_CONNECTION.closePort();
 
