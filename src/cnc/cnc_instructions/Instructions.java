@@ -9,10 +9,7 @@ public class Instructions {
      * TODO Prüfe ob außerhalb der CNC Grenzen gefahren wird
      */
     public void moveAxis(String axis, int mikometer) throws Exception {
-        String command = "";
-        int x = CncState.absolute_X,
-                y = CncState.absolute_Y,
-                z = CncState.absolute_Z;
+        int x = CncState.absolute_X, y = CncState.absolute_Y, z = CncState.absolute_Z;
 
         switch (axis.toUpperCase()) {
             case "X":
@@ -86,5 +83,27 @@ public class Instructions {
         String command = "RVS0;";
         CncState.CNC_CONNECTION.sendStringToComm(command);
         CncState.toolOn = false;
+    }
+
+    /**
+     * TODO Über welchen Port wird die Unterdruckplatte angesprochen, sodass die Platte angesaugt wird
+     */
+    public void startPlateSuction(){
+
+    }
+
+    /**
+     * siehe startPlateSuction()
+     */
+    public void stopPlateSuction(){
+
+    }
+
+    /**
+     * Befehl SVN möglicherweise brauch ich den gar nicht
+     */
+    public void setVirtualNullpoint() throws Exception {
+        String command = "?PA;";
+        CncState.CNC_CONNECTION.sendStringToComm(command);
     }
 }

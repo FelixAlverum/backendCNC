@@ -47,7 +47,16 @@ public class TestCncConnection {
             instructions.setzeVorschub(20 * 1000);                      // Vorschub setzen
             instructions.goCoordinate(100 * 1000, 100 * 1000, 0);   // Gehe zu einer Koordinate
             instructions.stopTool();                                    // Spindel ausschalten
-            //*/
+            instructions.goCoordinate(0, 0, 0);
+
+            CncState.CNC_CONNECTION.sendStringToComm("?PA;");
+            Thread.sleep(5000);
+            CncState.CNC_CONNECTION.sendStringToComm("?PA;");
+            Thread.sleep(5000);
+            CncState.CNC_CONNECTION.sendStringToComm("?PA;");
+            Thread.sleep(5000);
+            CncState.CNC_CONNECTION.sendStringToComm("?PA;");
+
 
             System.out.println("\n\n\nEnde Testprogramm\n\n\n\n");
 
