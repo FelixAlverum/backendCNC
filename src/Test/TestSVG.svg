@@ -1,12 +1,18 @@
 <?xml version="1.0" standalone="no"?>
-<svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="12cm" height="8cm" version="1.1" xmlns="http://www.w3.org/2000/svg">
 
+    <rect x="200" y="10" width="300" height="300" stroke="black" fill="white" stroke-width="5"/>
 
-    <g id="egal" fill="blue" stroke="black" stroke-width="5">
-    <path d="M2440 11773 c-1389 -2 -2117 -6 -2124 -13 -7 -7 -6 -14 1 -21 9 -9
-1113 -10 4237 -4 4123 7 4226 8 4226 26 0 21 629 20 -6340 12z"/>
-    </g>
+    <line x1="220" x2="300" y1="70" y2="80" stroke="black" stroke-width="7"/>
+    <rect x="250" y="90" width="30" height="30" stroke="black" fill="white" stroke-width="7"/>
 
+    <line x1="380" x2="460" y1="80" y2="70" stroke="black" stroke-width="7"/>
+    <rect x="400" y="90" width="30" height="30" stroke="black" fill="white" stroke-width="7"/>
 
-    <path d="M20,230 Q40,205 50,230 T90,230" fill="none" stroke="black" stroke-width="5"/>
+    <circle cx="340" cy="170" r="25" stroke="black" fill="transparent" stroke-width="5"/>
+
+    <polyline points="250 210  260 230  270 250  280 260  320 280 350 280
+                      380 280  420 260  430 250  440 240  450 230 450 210 250 210"
+              stroke="red" fill="white" stroke-width="7"/>
+
 </svg>

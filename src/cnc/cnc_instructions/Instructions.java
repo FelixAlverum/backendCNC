@@ -8,18 +8,18 @@ public class Instructions {
      * fahre in Achsenrichtung Richtung
      * TODO Prüfe ob außerhalb der CNC Grenzen gefahren wird
      */
-    public void moveAxis(String axis, int mikometer) throws Exception {
+    public void moveAxis(String axis, int micrometres) throws Exception {
         int x = CncState.absolute_X, y = CncState.absolute_Y, z = CncState.absolute_Z;
 
         switch (axis.toUpperCase()) {
             case "X":
-                x = x + mikometer;
+                x = x + micrometres;
                 break;
             case "Y":
-                y = y + mikometer;
+                y = y + micrometres;
                 break;
             case "Z":
-                z = z + mikometer;
+                z = z + micrometres;
                 break;
             default:
                 throw new Exception("Achse: " + axis + " nicht bekannt.");
