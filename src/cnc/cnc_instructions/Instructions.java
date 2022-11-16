@@ -37,19 +37,20 @@ public class Instructions {
         String command = "";
 
         if (CncState.toolOn == true) {
-            command = "PA" + x + "," + y + ",0;";
+            command = "PA" + x + "," + y + "," + z + ";";
         } else {
-            command = "GA" + x + "," + y + ",0;";
+            command = "GA" + x + "," + y + "," + z + ";";
         }
         CncState.CNC_CONNECTION.sendStringToComm(command);
 
+        /*
         if (CncState.toolOn == true) {
             command = "PA,," + z + ";";
         } else {
             command = "GA,," + z + ";";
         }
         CncState.CNC_CONNECTION.sendStringToComm(command);
-
+*/
 
         CncState.absolute_X = x;
         CncState.absolute_Y = y;
@@ -88,14 +89,14 @@ public class Instructions {
     /**
      * TODO Über welchen Port wird die Unterdruckplatte angesprochen, sodass die Platte angesaugt wird
      */
-    public void startPlateSuction(){
+    public void startPlateSuction() {
 
     }
 
     /**
      * siehe startPlateSuction()
      */
-    public void stopPlateSuction(){
+    public void stopPlateSuction() {
 
     }
 
@@ -109,13 +110,14 @@ public class Instructions {
 
     /**
      * Kreisfunktion
+     *
      * @param xStart
      * @param yStart
      * @param radius
      * @param xEnd
      * @param yEnd
      */
-    public void approximateCircle(int xStart, int yStart, int radius, int xEnd, int yEnd){
+    public void approximateCircle(int xStart, int yStart, int radius, int xEnd, int yEnd) {
 
     }
 }
