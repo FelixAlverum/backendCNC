@@ -31,6 +31,9 @@ import java.util.regex.Pattern;
  * <p>
  * TODO add jSerialComm to externalJARs; download from https://fazecast.github.io/jSerialComm/
  * TODO add apache Commons Lang to externalJARs; download from https://commons.apache.org/proper/commons-lang/download_lang.cgi
+ * TODO API erweitern :
+ * 1. nach jedem CNC Befehl die Antwort abzuwarten - gewünschter Ablauf: Sende CNC befehl -> CNC führt Befehl aus -> sendet response -> beliebige (Re-) Aktion im Code -> sende nächsten CNC Befehl
+ * 2. Abbruchfunktion
  * <p>
  * Interessant:
  * http://www.codeplastic.com/2017/06/05/g-code-with-processing-part-1/

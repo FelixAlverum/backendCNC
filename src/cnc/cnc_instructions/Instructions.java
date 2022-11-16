@@ -106,4 +106,16 @@ public class Instructions {
         String command = "?PA;";
         CncState.CNC_CONNECTION.sendStringToComm(command);
     }
+
+    /**
+     * Kreisfunktion
+     * @param xStart
+     * @param yStart
+     * @param radius
+     * @param xEnd
+     * @param yEnd
+     */
+    public void approximateCircle(int xStart, int yStart, int radius, int xEnd, int yEnd){
+
+    }
 }

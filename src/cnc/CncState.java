@@ -19,6 +19,7 @@ public class CncState {
     // Tool
     public static String toolEquipped;      // Wird wahrscheinlich nicht benötigt
     public static boolean toolOn;
+    public static int toolWidth;            // im SVG vergleichbar mit stroke-width
     public static int feed;                 // Vorschub in 1/1000 mm/s
     public static int rotationalSpeed;      // Drehzahl Umdrehungen/Minuten
 
