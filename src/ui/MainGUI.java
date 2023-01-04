@@ -26,12 +26,13 @@ public class MainGUI extends JFrame {
     public MainGUI(){
         setTitle("CNC - Group 3");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
         setLocationRelativeTo(null);
 
         UI_CONST.cardLayout = new CardLayout();
         UI_CONST.showPanel = new JPanel();
-        UI_CONST.showPanel.setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
         UI_CONST.showPanel.setLayout(UI_CONST.cardLayout);
+        UI_CONST.showPanel.setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
 
         // create Panels
         UI_CONST.mainPanel = new MainPanel();
