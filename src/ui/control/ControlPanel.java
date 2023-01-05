@@ -55,7 +55,7 @@ public class ControlPanel extends JPanel {
                 }
             }
         });
-        xPlus.setText("X -");
+        xMinus.setText("X -");
         constraints.gridx = 3;
         constraints.gridy = 2;
         add(xMinus,constraints);
