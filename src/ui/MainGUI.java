@@ -37,6 +37,13 @@ public class MainGUI extends JFrame {
         }
 
         setTitle("CNC - Group 3");
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                 UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
         setLocationRelativeTo(null);
@@ -67,10 +74,11 @@ public class MainGUI extends JFrame {
 
         add(UI_CONST.showPanel);
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
     public static void main(String[] args) {
-        new MainGUI();
+        SwingUtilities.invokeLater(() -> new MainGUI());
     }
 }
