@@ -42,7 +42,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("X", 250);
+                    instructions.moveAxis("X", -250);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -65,7 +65,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("X", -250);
+                    instructions.moveAxis("X", 250);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -134,7 +134,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("Z", 250);
+                    instructions.moveAxis("Z", -250);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -157,7 +157,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("Z", -250);
+                    instructions.moveAxis("Z", 250);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
