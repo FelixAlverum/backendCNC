@@ -45,6 +45,21 @@ public class ControlPanel extends JPanel {
         constraints.gridy = 2;
         add(xPlus,constraints);
 
+        xMinus = new JButton(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    instructions.moveAxis("X", -250);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        xPlus.setText("X -");
+        constraints.gridx = 3;
+        constraints.gridy = 2;
+        add(xMinus,constraints);
+
         // back button
         back = new JButton(new AbstractAction() {
             @Override
