@@ -1,5 +1,8 @@
 package ui;
 
+import cnc.CncState;
+import cnc.cnc_instructions.Instructions;
+import connection.cnc.SerialAPI;
 import ui.control.ControlPanel;
 import ui.guide.GuidePanel;
 import ui.image.DrawPanel;
@@ -18,12 +21,21 @@ import java.awt.*;
  */
 
 public class MainGUI extends JFrame {
-
-    private String currentVisiblePanel = null;
-
-
-
     public MainGUI(){
+
+        // CNC Connection
+        try {
+            CncState.CNC_CONNECTION = new SerialAPI();
+            CncState.CNC_CONNECTION.initPort("COM4");
+            CncState.CNC_CONNECTION.openPort();
+            CncState.CNC_CONNECTION.initCNC();
+
+            Instructions instructions = new Instructions();
+            instructions.goCoordinate(0, 0, 0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         setTitle("CNC - Group 3");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
