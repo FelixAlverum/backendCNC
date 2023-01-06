@@ -36,22 +36,9 @@ public class MainGUI extends JFrame {
             e.printStackTrace();
         }
 
-        setTitle("CNC - Group 3");
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-                 UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        }
-
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
-        setLocationRelativeTo(null);
-
         UI_CONST.cardLayout = new CardLayout();
         UI_CONST.showPanel = new JPanel();
         UI_CONST.showPanel.setLayout(UI_CONST.cardLayout);
-        UI_CONST.showPanel.setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
 
         // create Panels
         UI_CONST.mainPanel = new MainPanel();
@@ -74,6 +61,10 @@ public class MainGUI extends JFrame {
 
         add(UI_CONST.showPanel);
         pack();
+
+        setTitle("CNC - Group 3");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
         setLocationRelativeTo(null);
         setVisible(true);
     }

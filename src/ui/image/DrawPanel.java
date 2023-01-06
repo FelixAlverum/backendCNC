@@ -5,9 +5,12 @@ import ui.res.UI_CONST;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * https://wiki.byte-welt.net/wiki/Malen_in_Swing_Teil_2:_ein_einfaches_Malprogramm
@@ -16,7 +19,13 @@ import java.awt.event.ActionListener;
 public class DrawPanel extends JPanel {
 
     private JPanel drawPanel, brushPanel, footerPanel;
-    GridBagConstraints gbc;
+    private GridBagConstraints gbc;
+
+    private Point lastPoint;
+    private Image image;
+    private Graphics2D g2d;
+    private ActionListener actionHandler;
+
 
     public DrawPanel() {
         setLayout(new GridBagLayout());
@@ -29,10 +38,58 @@ public class DrawPanel extends JPanel {
     }
 
     private void initDrawPanel() {
-        drawPanel = new JPanel(new BorderLayout());
-        drawPanel.setBorder(new TitledBorder("Drawing Panel"));
+        drawPanel = new JPanel(new BorderLayout()){
+            @Override
+            public void paintComponent(final Graphics g) {
+                super.paintComponent(g);
+                // initialises the image with the first paint
+                // or checks the image size with the current panelsize
+                if (image == null || image.getWidth(this) < getSize().width
+                        || image.getHeight(this) < getSize().height) {
+                    resetImage();
+                }
+                Graphics2D g2 = (Graphics2D) g;
+                Rectangle r = g.getClipBounds();
+                g2.drawImage(image, r.x, r.y, r.width + r.x, r.height + r.y,
+                        r.x, r.y, r.width + r.x, r.height + r.y, this);
+            }
+        };
+        drawPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 2), "Drawing Panel"));
         drawPanel.setBackground(Color.WHITE);
 
+        // Mouse Listener
+        drawPanel.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("mousePressed()");
+                lastPoint = e.getPoint();
+                draw(lastPoint);
+            }
+        });
+        drawPanel.addMouseMotionListener(new MouseInputAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                System.out.println("mouseDragged()");
+                double xDelta = e.getX() - lastPoint.getX();
+                double yDelta = e.getY() - lastPoint.getY();
+                double delta = Math.max(Math.abs(xDelta), Math.abs(yDelta));
+                double xIncrement = xDelta / delta;
+                double yIncrement = yDelta / delta;
+                double xStart = lastPoint.getX();
+                double yStart = lastPoint.getY();
+                for (int i = 0; i < delta; i++) {
+                    Point interpolated = new Point((int) xStart, (int) yStart);
+                    draw(interpolated);
+                    xStart += xIncrement;
+                    yStart += yIncrement;
+                }
+                draw(e.getPoint());
+                lastPoint = e.getPoint();
+            }
+        });
+
+
+        // Add to MainPanel
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridheight = 7;
@@ -42,10 +99,92 @@ public class DrawPanel extends JPanel {
         add(drawPanel, gbc);
     }
 
+    private void draw(final Point start) {
+        int brushSize = UI_CONST.brushSize;
+        int x = start.x - (brushSize / 2) + 1;
+        int y = start.y - (brushSize / 2) + 1;
+        g2d.fillOval(x, y, brushSize, brushSize);
+        drawPanel.repaint(x, y, brushSize, brushSize);
+    }
+
+    private void resetImage() {
+        Image saveImage = image;
+        Graphics2D saveG2d = g2d;
+        image = createImage(getWidth(), getHeight());
+        g2d = (Graphics2D) image.getGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setBackground(Color.WHITE);
+        g2d.clearRect(0, 0, getWidth(), getHeight());
+        g2d.setColor(Color.BLACK);
+        if (saveG2d != null) {
+            g2d.setColor(saveG2d.getColor());
+            g2d.drawImage(saveImage, 0, 0, this);
+            saveG2d.dispose();
+        }
+    }
+    public void clearPaint() {
+        g2d.setBackground(Color.WHITE);
+        g2d.clearRect(0, 0, getWidth(), getHeight());
+        repaint();
+        g2d.setColor(Color.BLACK);
+    }
+
+
     private void initBrushPanel() {
         brushPanel = new JPanel(new GridLayout(0, 1, 5, 5));
-        brushPanel.setBorder(new TitledBorder("Brush Panel"));
+        brushPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 2), "Brush Panel"));
         brushPanel.setBackground(Color.LIGHT_GRAY);
+
+        actionHandler = new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                String s = e.getActionCommand();
+                if (s.equals(" ")) {
+                    JButton button = (JButton) e.getSource();
+                    System.out.println("COLOR = " + button.getBackground());
+                    g2d.setColor(button.getBackground());
+                } else if (s.equals("Clear")) {
+                    clearPaint();
+                } else if (s.equals("+")) {
+                    UI_CONST.brushSize +=2;
+                } else if (s.equals("-")){
+                    UI_CONST.brushSize -=2;
+                }
+            }
+        };
+
+        JButton depth1 = new JButton();
+        depth1.setBackground(Color.LIGHT_GRAY);
+        depth1.setText(" ");
+        depth1.addActionListener(actionHandler);
+        brushPanel.add(depth1);
+
+        JButton depth2 = new JButton();
+        depth2.setBackground(Color.GRAY);
+        depth2.setText(" ");
+        depth2.addActionListener(actionHandler);
+        brushPanel.add(depth2);
+
+        JButton depth3 = new JButton();
+        depth3.setBackground(Color.BLACK);
+        depth3.setText(" ");
+        depth3.addActionListener(actionHandler);
+        brushPanel.add(depth3);
+
+        JButton clear = new JButton();
+        clear.setText("Clear");
+        brushPanel.add(clear);
+        clear.addActionListener(actionHandler);
+
+        JButton increaseBrushSize = new JButton();
+        increaseBrushSize.setText("+");
+        increaseBrushSize.addActionListener(actionHandler);
+        brushPanel.add(increaseBrushSize);
+
+        JButton decreaseBrushSize = new JButton();
+        decreaseBrushSize.setText("-");
+        decreaseBrushSize.addActionListener(actionHandler);
+        brushPanel.add(decreaseBrushSize);
 
         gbc.gridx = 8;
         gbc.gridy = 0;
@@ -54,7 +193,6 @@ public class DrawPanel extends JPanel {
         gbc.weightx =0.2;
         gbc.weighty =0.9;
         add(brushPanel, gbc);
-
     }
 
     private void initFooterPanel() {
@@ -74,8 +212,7 @@ public class DrawPanel extends JPanel {
         JButton next = new JButton(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // #TODO auf folgepage navigieren
-                UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.MAIN_PANEL);
+                UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.DRAW_SET_DATA_PANEL);
             }
         });
         next.setText("Next");
@@ -89,66 +226,4 @@ public class DrawPanel extends JPanel {
         gbc.weighty =0.1;
         add(footerPanel, gbc);
     }
-
-    /**
-     final private DrawingPanel drawingPanel;
-     final private JPanel buttonPanel;
-     final private JButton clearButton, upSize, downSize;
-     private final ActionListener actionHandler;
-
-
-     public DrawPanel(){
-     JFrame frame = new JFrame("DrawOnImage");
-     drawingPanel = new DrawingPanel();
-     actionHandler = new ActionListener() {
-
-    @Override public void actionPerformed(final ActionEvent e) {
-    String s = e.getActionCommand();
-    if (s.equals("Paint")) {
-    JButton button = (JButton) e.getSource();
-    drawingPanel.setPaintColor(button.getBackground());
-    } else if (s.equals("Clear")) {
-    drawingPanel.clearPaint();
-    } else if (s.equals("+")) {
-    drawingPanel.increaseBrushSize();
-    } else {
-    drawingPanel.decreaseBrushSize();
-    }
-    }
-    };
-     buttonPanel = new JPanel();
-     buttonPanel.setLayout(new GridLayout(2, 0, 2, 2));
-     addButton(Color.BLACK);
-     addButton(Color.BLUE);
-     addButton(Color.GREEN);
-     upSize = addButton(null);
-     upSize.setText("+");
-     addButton(Color.RED);
-     addButton(Color.ORANGE);
-     clearButton = addButton(null);
-     clearButton.setText("Clear");
-     downSize = addButton(null);
-     downSize.setText("-");
-     frame.getContentPane().add(new JScrollPane(drawingPanel));
-     frame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-     frame.pack();
-     frame.setLocationRelativeTo(null);
-     frame.setVisible(true);
-     }
-
-     private JButton addButton(final Color color) {
-     JButton button = new JButton();
-     button.setBackground(new Color(230, 240, 250));
-     button.setBorder(BorderFactory.createEtchedBorder());
-     if (color != null) {
-     button.setForeground(Color.WHITE);
-     button.setBackground(color);
-     }
-     button.setText("Paint");
-     buttonPanel.add(button);
-     button.addActionListener(actionHandler);
-     return (button);
-     }
-     */
 }

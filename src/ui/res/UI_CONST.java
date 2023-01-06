@@ -30,4 +30,8 @@ public class UI_CONST {
     public static GuidePanel guidePanel;
 
     public static CardLayout cardLayout;
+
+
+    // Draw Panel Variables
+    public static int brushSize = 5;
 }
