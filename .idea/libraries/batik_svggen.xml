@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="batik.svggen" type="repository">
+    <properties maven-id="batik:batik-svggen:1.6-1" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/batik-svggen-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-gvt-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-awt-util-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-util-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-gui-util-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-ext-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xmlParserAPIs-2.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-svg-dom-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-dom-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-css-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-xml-1.6-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xercesImpl-2.5.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/batik-parser-1.6-1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

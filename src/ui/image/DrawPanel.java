@@ -1,7 +1,9 @@
 package ui.image;
 
+import jankovicsandras.imagetracer.ImageTracer;
 import ui.res.UI_CONST;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -10,21 +12,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.image.RenderedImage;
+import java.io.*;
+import java.util.HashMap;
 
 /**
  * https://wiki.byte-welt.net/wiki/Malen_in_Swing_Teil_2:_ein_einfaches_Malprogramm
  * https://stackoverflow.com/questions/5621338/how-to-add-jtable-in-jpanel-with-null-layout/5630271#5630271
+ * https://xmlgraphics.apache.org/batik/using/svg-generator.html
  */
 public class DrawPanel extends JPanel {
 
-    private JPanel drawPanel, brushPanel, footerPanel;
+    private JPanel drawPanel;
     private GridBagConstraints gbc;
 
     private Point lastPoint;
     private Image image;
     private Graphics2D g2d;
-    private ActionListener actionHandler;
 
 
     public DrawPanel() {
@@ -38,7 +42,7 @@ public class DrawPanel extends JPanel {
     }
 
     private void initDrawPanel() {
-        drawPanel = new JPanel(new BorderLayout()){
+        drawPanel = new JPanel(new BorderLayout()) {
             @Override
             public void paintComponent(final Graphics g) {
                 super.paintComponent(g);
@@ -94,8 +98,8 @@ public class DrawPanel extends JPanel {
         gbc.gridy = 0;
         gbc.gridheight = 7;
         gbc.gridwidth = 8;
-        gbc.weightx =0.8;
-        gbc.weighty =0.9;
+        gbc.weightx = 0.8;
+        gbc.weighty = 0.9;
         add(drawPanel, gbc);
     }
 
@@ -122,6 +126,7 @@ public class DrawPanel extends JPanel {
             saveG2d.dispose();
         }
     }
+
     public void clearPaint() {
         g2d.setBackground(Color.WHITE);
         g2d.clearRect(0, 0, getWidth(), getHeight());
@@ -131,11 +136,11 @@ public class DrawPanel extends JPanel {
 
 
     private void initBrushPanel() {
-        brushPanel = new JPanel(new GridLayout(0, 1, 5, 5));
+        JPanel brushPanel = new JPanel(new GridLayout(0, 1, 5, 5));
         brushPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 2), "Brush Panel"));
         brushPanel.setBackground(Color.LIGHT_GRAY);
 
-        actionHandler = new ActionListener() {
+        ActionListener actionHandler = new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 String s = e.getActionCommand();
@@ -146,27 +151,27 @@ public class DrawPanel extends JPanel {
                 } else if (s.equals("Clear")) {
                     clearPaint();
                 } else if (s.equals("+")) {
-                    UI_CONST.brushSize +=2;
-                } else if (s.equals("-")){
-                    UI_CONST.brushSize -=2;
+                    UI_CONST.brushSize += 2;
+                } else if (s.equals("-")) {
+                    UI_CONST.brushSize -= 2;
                 }
             }
         };
 
         JButton depth1 = new JButton();
-        depth1.setBackground(Color.LIGHT_GRAY);
+        depth1.setBackground(new Color(239, 125, 14));
         depth1.setText(" ");
         depth1.addActionListener(actionHandler);
         brushPanel.add(depth1);
 
         JButton depth2 = new JButton();
-        depth2.setBackground(Color.GRAY);
+        depth2.setBackground(new Color(14, 239, 93));
         depth2.setText(" ");
         depth2.addActionListener(actionHandler);
         brushPanel.add(depth2);
 
         JButton depth3 = new JButton();
-        depth3.setBackground(Color.BLACK);
+        depth3.setBackground(new Color(101, 8, 136));
         depth3.setText(" ");
         depth3.addActionListener(actionHandler);
         brushPanel.add(depth3);
@@ -190,13 +195,15 @@ public class DrawPanel extends JPanel {
         gbc.gridy = 0;
         gbc.gridheight = 7;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weightx =0.2;
-        gbc.weighty =0.9;
+        gbc.weightx = 0.2;
+        gbc.weighty = 0.9;
         add(brushPanel, gbc);
     }
 
     private void initFooterPanel() {
-        footerPanel = new JPanel(new BorderLayout());
+        JPanel footerPanel = new JPanel();
+        footerPanel.setLayout(new BoxLayout(footerPanel, BoxLayout.LINE_AXIS));
+        footerPanel.add(Box.createHorizontalBox());
         footerPanel.setBackground(Color.GRAY);
         footerPanel.setBorder(new LineBorder(Color.GRAY, 5));
 
@@ -207,7 +214,79 @@ public class DrawPanel extends JPanel {
             }
         });
         back.setText("Back");
-        footerPanel.add(back, BorderLayout.LINE_START);
+        back.setMaximumSize(new Dimension(200, 200));
+        footerPanel.add(back);
+
+        JButton saveSVG = new JButton(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //ImageIO.write((RenderedImage) image, "png", new File("./src/Test/DrawPanelPNG.png"));
+
+                    // TODO Twaek Options
+                    HashMap<String, Float> options = new HashMap<String, Float>();
+
+                    // Tracing
+                    options.put("ltres", 1f);
+                    options.put("qtres", 1f);
+                    options.put("pathomit", 8f);
+
+                    // Color quantization
+                    options.put("colorsampling", 1f); // 1f means true ; 0f means false: starting with generated palette
+                    options.put("numberofcolors", 8f);
+                    options.put("mincolorratio", 0.02f);
+                    options.put("colorquantcycles", 8f);
+
+                    // SVG rendering
+                    options.put("scale", 1f);
+                    options.put("roundcoords", 1f); // 1f means rounded to 1 decimal places, like 7.3 ; 3f means rounded to 3 places, like 7.356 ; etc.
+                    options.put("lcpr", 0f);
+                    options.put("qcpr", 0f);
+                    options.put("desc", 0f); // 1f means true ; 0f means false: SVG descriptions deactivated
+                    options.put("viewbox", 0f); // 1f means true ; 0f means false: fixed width and height
+
+                    // Selective Gauss Blur
+                    options.put("blurradius", 0f); // 0f means deactivated; 1f .. 5f : blur with this radius
+                    options.put("blurdelta", 20f); // smaller than this RGB difference will be blurred
+
+                    // Palette TODO für import
+                    // This is an example of a grayscale palette
+                    // please note that signed byte values [ -128 .. 127 ] will be converted to [ 0 .. 255 ] in the getsvgstring function
+//                    byte[][] palette = new byte[8][4];
+//                    for (int colorcnt = 0; colorcnt < 8; colorcnt++) {
+//                        palette[colorcnt][0] = (byte) (-128 + colorcnt * 32); // R
+//                        palette[colorcnt][1] = (byte) (-128 + colorcnt * 32); // G
+//                        palette[colorcnt][2] = (byte) (-128 + colorcnt * 32); // B
+//                        palette[colorcnt][3] = (byte) 127;              // A
+//                    }
+
+                    ImageTracer.saveString("./src/Test/DrawPanelSVG.svg", ImageTracer.imageToSVG("./src/Test/DrawPanelPNG.png", options, null));
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+        saveSVG.setText("Save as SVG");
+        saveSVG.setMaximumSize(new Dimension(200, 200));
+        footerPanel.add(saveSVG);
+
+        JButton savePNG = new JButton(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    if (ImageIO.write((RenderedImage) image, "png", new File("./src/Test/DrawPanelPNG.png"))) {
+                        System.out.println("-- saved");
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        savePNG.setText("Save as PNG");
+        savePNG.setMaximumSize(new Dimension(200, 200));
+        footerPanel.add(savePNG);
 
         JButton next = new JButton(new AbstractAction() {
             @Override
@@ -216,14 +295,15 @@ public class DrawPanel extends JPanel {
             }
         });
         next.setText("Next");
-        footerPanel.add(next, BorderLayout.LINE_END);
+        next.setMaximumSize(new Dimension(200, 200));
+        footerPanel.add(next);
 
         gbc.gridx = 0;
         gbc.gridy = 7;
         gbc.gridheight = GridBagConstraints.REMAINDER;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weightx =1.0;
-        gbc.weighty =0.1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.1;
         add(footerPanel, gbc);
     }
 }
