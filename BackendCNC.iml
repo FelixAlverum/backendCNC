@@ -26,7 +26,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="java" level="project" />
-    <orderEntry type="library" name="fop-transcoder-allinone-2.7" level="project" />
     <orderEntry type="library" name="batik.svggen" level="project" />
     <orderEntry type="module-library">
       <library>

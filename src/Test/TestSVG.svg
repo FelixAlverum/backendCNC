@@ -1,18 +1,9 @@
 <?xml version="1.0" standalone="no"?>
-<svg width="12cm" height="8cm" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="140" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg">
 
-    <rect x="200" y="10" width="300" height="300" stroke="black" fill="white" stroke-width="5"/>
+    <rect x="10" y="10" width="120" height="80" stroke="black" fill="white"/>
+    <circle cx="10" cy="10" r="10" stroke="black" fill="white" />
+    <path d="M 10 20 A 150 180 0 0 0  10 20" stroke="red" fill="none"/>
 
-    <line x1="220" x2="300" y1="70" y2="80" stroke="black" stroke-width="7"/>
-    <rect x="250" y="90" width="30" height="30" stroke="black" fill="white" stroke-width="7"/>
-
-    <line x1="380" x2="460" y1="80" y2="70" stroke="black" stroke-width="7"/>
-    <rect x="400" y="90" width="30" height="30" stroke="black" fill="white" stroke-width="7"/>
-
-    <circle cx="340" cy="170" r="25" stroke="black" fill="transparent" stroke-width="5"/>
-
-    <polyline points="250 210  260 230  270 250  280 260  320 280 350 280
-                      380 280  420 260  430 250  440 240  450 230 450 210 250 210"
-              stroke="red" fill="white" stroke-width="7"/>
 
 </svg>
