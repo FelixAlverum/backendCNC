@@ -24,7 +24,7 @@ public class MainPanel extends JPanel {
     }
 
     private void initMainPanel(){
-        header = new JLabel("MAIN MENU");
+        header = new JLabel("Hauptmenü");
         constraints.gridx = 5;
         constraints.gridy = 0;
         add(header,constraints);
@@ -48,7 +48,7 @@ public class MainPanel extends JPanel {
                 UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.CONTROL_PANEL);
             }
         });
-        btControl.setText("Control CNC");
+        btControl.setText("CNC-Steuerung");
         constraints.gridx = 2;
         constraints.gridy = 2;
         add(btControl,constraints);
@@ -61,7 +61,7 @@ public class MainPanel extends JPanel {
                 UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.DRAW_PANEL);
             }
         });
-        btDrawImage.setText("Draw Image");
+        btDrawImage.setText("Bild zeichnen");
         constraints.gridx = 4;
         constraints.gridy = 2;
         add(btDrawImage,constraints);
@@ -73,7 +73,7 @@ public class MainPanel extends JPanel {
                 UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.IMPORT_IMAGE_PANEL);
             }
         });
-        btImportImage.setText("Import Image");
+        btImportImage.setText("Bild importieren");
         constraints.gridx = 2;
         constraints.gridy = 3;
         add(btImportImage,constraints);
@@ -84,7 +84,7 @@ public class MainPanel extends JPanel {
                 UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.GUIDE_PANEL);
             }
         });
-        btGuide.setText("Guide");
+        btGuide.setText("Hilfe / Info");
         constraints.gridx = 4;
         constraints.gridy = 3;
         add(btGuide,constraints);

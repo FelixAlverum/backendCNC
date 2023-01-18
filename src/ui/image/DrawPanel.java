@@ -58,7 +58,7 @@ public class DrawPanel extends JPanel {
                         r.x, r.y, r.width + r.x, r.height + r.y, this);
             }
         };
-        drawPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 2), "Drawing Panel"));
+        drawPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 2), "Zeichenoberfläche"));
         drawPanel.setBackground(Color.WHITE);
 
         // Mouse Listener
@@ -137,7 +137,7 @@ public class DrawPanel extends JPanel {
 
     private void initBrushPanel() {
         JPanel brushPanel = new JPanel(new GridLayout(0, 1, 5, 5));
-        brushPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 2), "Brush Panel"));
+        brushPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 2), "Pinsel"));
         brushPanel.setBackground(Color.LIGHT_GRAY);
 
         ActionListener actionHandler = new ActionListener() {
@@ -148,7 +148,7 @@ public class DrawPanel extends JPanel {
                     JButton button = (JButton) e.getSource();
                     System.out.println("COLOR = " + button.getBackground());
                     g2d.setColor(button.getBackground());
-                } else if (s.equals("Clear")) {
+                } else if (s.equals("Löschen")) {
                     clearPaint();
                 } else if (s.equals("+")) {
                     UI_CONST.brushSize += 2;
@@ -177,7 +177,7 @@ public class DrawPanel extends JPanel {
         brushPanel.add(depth3);
 
         JButton clear = new JButton();
-        clear.setText("Clear");
+        clear.setText("Löschen");
         brushPanel.add(clear);
         clear.addActionListener(actionHandler);
 
@@ -213,7 +213,7 @@ public class DrawPanel extends JPanel {
                 UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.MAIN_PANEL);
             }
         });
-        back.setText("Back");
+        back.setText("Zurück");
         back.setMaximumSize(new Dimension(200, 200));
         footerPanel.add(back);
 
@@ -267,7 +267,7 @@ public class DrawPanel extends JPanel {
 
             }
         });
-        saveSVG.setText("Save as SVG");
+        saveSVG.setText("Als SVG speichern");
         saveSVG.setMaximumSize(new Dimension(200, 200));
         footerPanel.add(saveSVG);
 
@@ -277,14 +277,14 @@ public class DrawPanel extends JPanel {
 
                 try {
                     if (ImageIO.write((RenderedImage) image, "png", new File("./src/Test/DrawPanelPNG.png"))) {
-                        System.out.println("-- saved");
+                        System.out.println("-- gespeichert");
                     }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
         });
-        savePNG.setText("Save as PNG");
+        savePNG.setText("Als PNG speichern");
         savePNG.setMaximumSize(new Dimension(200, 200));
         footerPanel.add(savePNG);
 
@@ -294,7 +294,7 @@ public class DrawPanel extends JPanel {
                 UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.DRAW_SET_DATA_PANEL);
             }
         });
-        next.setText("Next");
+        next.setText("Weiter");
         next.setMaximumSize(new Dimension(200, 200));
         footerPanel.add(next);
 

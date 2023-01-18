@@ -1,5 +1,7 @@
 package ui.image;
 
+import ui.res.UI_CONST;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -31,6 +33,16 @@ public class ImportImagePanel extends JPanel {
         importImage.add(Box.createHorizontalBox());
         importImage.setBackground(Color.GRAY);
         importImage.setBorder(new LineBorder(Color.GRAY, 5));
+
+        JButton back = new JButton(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.MAIN_PANEL);
+            }
+        });
+        back.setText("Zurück");
+        back.setMaximumSize(new Dimension(200, 200));
+        importImage.add(back);
 
         btnBrowse = new JButton(new AbstractAction() {
             @Override
