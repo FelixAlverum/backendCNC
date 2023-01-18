@@ -31,7 +31,7 @@ public class ControlPanel extends JPanel {
     }
 
     private void initControlPanel(){
-        header = new JLabel("CNC Controller");
+        header = new JLabel("CNC-Steuerung");
         constraints.gridx = 5;
         constraints.gridy = 0;
         add(header,constraints);
@@ -183,7 +183,7 @@ public class ControlPanel extends JPanel {
                 UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.MAIN_PANEL);
             }
         });
-        back.setText("Back");
+        back.setText("Zurück");
         constraints.gridx = 5;
         constraints.gridy = 5;
         add(back,constraints);

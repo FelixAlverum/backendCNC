@@ -62,7 +62,7 @@ public class MainGUI extends JFrame {
         add(UI_CONST.showPanel);
         pack();
 
-        setTitle("CNC - Group 3");
+        setTitle("CNC - Gruppe 3");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize((int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75), (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75));
         setLocationRelativeTo(null);
