@@ -23,10 +23,14 @@ public class CncState {
     public static int feed;                 // Vorschub in 1/1000 mm/s
     public static int rotationalSpeed;      // Drehzahl Umdrehungen/Minuten
 
-    // workpart
-    public static int workpart_width;
-    public static int workpart_length;
-    public static int workpart_depth;
+    // workpart in mm
+    public static int workpart_width = 150;
+    public static int workpart_length = 100;
+    public static int workpart_depth = 5;
+
+    // Canvas in px
+    public static int canvas_width = 150;
+    public static int canvas_length = 100;
 
     // CNC Response Log
     public static ArrayList<String> cncLOG = new ArrayList<String>();
