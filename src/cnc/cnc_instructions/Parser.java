@@ -20,7 +20,7 @@ public class Parser {
      */
 
     private ArrayList<String> gCode = new ArrayList<String>();
-    private ArrayList<String> svg = new ArrayList<String>();
+    private ArrayList<String[]> svg = new ArrayList<String[]>();
 
     public void splitSvgCode() throws IOException {
         // get the SVG as String --> batik jar bekommen
@@ -28,14 +28,21 @@ public class Parser {
 
         try {
             String content = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
+            content.replaceAll("\\s+", " ");
+            content.replaceAll("\n", " ");
 
 
             while (content.contains("d=\"")){
-                this.svg.add(content.substring(content.indexOf("d=\"")+3, content.indexOf("Z\"/>")).trim());
+                this.svg.add(content.substring(content.indexOf("d=\"")+3, content.indexOf("Z\"/>")).split(" "));
                 content = content.substring(content.indexOf("Z\"/>")+4);
             }
-            for (String path: this.svg) {
-                System.out.println(path + "\n");
+            for (String[] path: this.svg) {
+                for (String s: path) {
+                    if(s.equals("") || s == null){
+                        continue;
+                    }
+                    System.out.println(s);
+                }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
