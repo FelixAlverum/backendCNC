@@ -28,17 +28,23 @@ public class Parser {
 
         try {
             String content = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
-            content.replaceAll("\\s+", " ");
-            content.replaceAll("\n", " ");
+            content = content.replaceAll("[\\t\\n\\r]+"," ");
 
-
-            while (content.contains("d=\"")){
-                this.svg.add(content.substring(content.indexOf("d=\"")+3, content.indexOf("Z\"/>")).split(" "));
-                content = content.substring(content.indexOf("Z\"/>")+4);
+            while (content.contains("d=\"")) {
+                int d = content.indexOf("d=\"") + 3;
+                if(d == -1){
+                    d = 0;
+                }
+                int z = content.indexOf("Z\"/>");
+                if(z == -1){
+                    z = content.length();
+                }
+                this.svg.add(content.substring(d, z).split(" "));
+                content = content.substring(content.indexOf("Z\"/>") + 4);
             }
-            for (String[] path: this.svg) {
-                for (String s: path) {
-                    if(s.equals("") || s == null){
+            for (String[] path : this.svg) {
+                for (String s : path) {
+                    if (s.equals("") || s == null) {
                         continue;
                     }
                     System.out.println(s);
@@ -49,7 +55,7 @@ public class Parser {
         }
     }
 
-    public void resizeCoordinates(File svg){
+    public void resizeCoordinates(File svg) {
 
     }
 }
