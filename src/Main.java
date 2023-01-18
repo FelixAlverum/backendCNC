@@ -12,7 +12,7 @@ public class Main {
         System.out.println("Hello CNC Backend");
 
         Parser p = new Parser();
-        p.splitSvgCode(null);
+        p.splitSvgCode();
 
     }
 }
