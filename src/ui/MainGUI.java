@@ -14,6 +14,8 @@ import ui.res.UI_CONST;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * https://stackoverflow.com/questions/46870004/how-to-switch-jpanels-in-a-jframe-from-within-the-panel
@@ -21,7 +23,7 @@ import java.awt.*;
  */
 
 public class MainGUI extends JFrame {
-    public MainGUI(){
+    public MainGUI() throws IOException, URISyntaxException {
 
         // CNC Connection
         try {
@@ -70,6 +72,12 @@ public class MainGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainGUI());
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new MainGUI();
+            } catch (IOException | URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

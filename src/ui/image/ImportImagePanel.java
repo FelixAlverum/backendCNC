@@ -60,9 +60,14 @@ public class ImportImagePanel extends JPanel {
                         BufferedImage bildAuswahl = ImageIO.read(chooser.getSelectedFile());
                             //bildLaden.paintComponents(bildAuswahl.getGraphics());
 
+                            Image dimg = bildAuswahl.getScaledInstance(bildAuswahl.getWidth(), bildAuswahl.getHeight(),Image.SCALE_SMOOTH);
+                            if (bildAuswahl.getWidth() > (int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75) || bildAuswahl.getHeight() > (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75)) {
 
-                            Image dimg = bildAuswahl.getScaledInstance(getWidth(), getHeight(),Image.SCALE_SMOOTH);
-                            bildLaden.setIcon(new ImageIcon(dimg));
+                                System.out.println("TESTMANN ES LÄUFT");
+                            } else {
+                                bildLaden.repaint();
+                                bildLaden.setIcon(new ImageIcon(dimg));
+                            }
                         }
                         catch (IOException ie) {
                         JOptionPane.showMessageDialog(null, "Bild konnte nicht geladen werden");
