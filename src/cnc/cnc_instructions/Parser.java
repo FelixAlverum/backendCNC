@@ -1,22 +1,12 @@
 package cnc.cnc_instructions;
 
 import cnc.CncState;
-import org.apache.batik.dom.svg.SAXSVGDocumentFactory;
-import org.apache.batik.util.XMLResourceDescriptor;
-import org.w3c.dom.Document;
-import org.w3c.dom.svg.SVGDocument;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
-
-import static cnc.CncState.workpart_length;
-import static cnc.CncState.workpart_width;
 
 public class Parser {
     /**
@@ -52,7 +42,7 @@ public class Parser {
                     if (s.equals("") || s == null) {
                         continue;
                     }
-                    System.out.println(s);
+                    // System.out.println(s);
                 }
             }
 
@@ -63,25 +53,43 @@ public class Parser {
             CncState.workpart_depth = 5;
 
             // Canvas in px
-            CncState.canvas_width = Integer.valueOf(content.substring(content.indexOf("width=\""+7), content.indexOf("\" height")));
-            CncState.canvas_length = Integer.valueOf(content.substring(content.indexOf("height=\""+7), content.indexOf("\" version")));
+            content = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
+            content = content.replaceAll("[\\t\\n\\r]+", " ");
+
+            int start = content.indexOf("width") + 7;
+            int end = content.indexOf("\" height");
+            CncState.canvas_width = Integer.valueOf(content.substring(start, end));
+
+            start = content.indexOf("height") + 8;
+            end = content.indexOf("\" version");
+            CncState.canvas_length = Integer.valueOf(content.substring(start, end));
 
             // scale
-            double scale = CncState.workpart_width / CncState.canvas_width;
+            System.out.println("CncState.workpart_width " + CncState.workpart_width);
+            System.out.println("CncState.canvas_width " + CncState.canvas_width);
+            System.out.println("CncState.workpart_length " + CncState.workpart_length);
+            System.out.println("CncState.canvas_length " + CncState.canvas_length);
 
-            if (scale > (CncState.workpart_length / CncState.canvas_length) ){
-                scale = CncState.workpart_length / CncState.canvas_length;
+            double pxCmScale = CncState.workpart_width / CncState.canvas_width;
+
+            System.out.println("pxCmScale " + pxCmScale);
+
+            if (pxCmScale > (CncState.workpart_length / CncState.canvas_length) ){
+                pxCmScale = CncState.workpart_length / CncState.canvas_length;
             }
 
-            // ratio
-            double rw = CncState.workpart_width / (CncState.workpart_width+CncState.workpart_length),
-                    rl = CncState.workpart_length / (CncState.workpart_width+CncState.workpart_length);
+            System.out.println("pxCmScale " + pxCmScale);
 
-            // https://www.calculatorsoup.com/calculators/math/ratios.php
+            // ratio
+            double gcf = gcd(CncState.canvas_length, CncState.canvas_width);
+            System.out.println("GFC: " + gcf);
 
             // calculate new width and length where the picture will be milled
-            double new_w = workpart_width / (workpart_width / workpart_length);   //e.g. 15 / (15/10) -->  15 * 3/2
-            double new_l = workpart_length / (workpart_width / workpart_length);
+            double new_w = pxCmScale * (CncState.canvas_width / gcf);
+            double new_l = pxCmScale * (CncState.canvas_length / gcf);
+
+            System.out.println("neue länge: " + pxCmScale + " /(" + CncState.canvas_length +"/"+ gcf +") = "+ new_w);
+            System.out.println("neue länge: " + pxCmScale + " /(" + CncState.canvas_width +"/"+ gcf +") = "+ new_l);
 
 
         } catch (IOException ex) {
@@ -91,5 +99,22 @@ public class Parser {
 
     public void resizeCoordinates(File svg) {
 
+    }
+
+    /*
+     * Größter gemeinsamer Faktor
+     */
+    private int gcd(int a, int b) {
+        if (a == 0)
+            return b;
+
+        while (b != 0) {
+            if (a > b)
+                a = a - b;
+            else
+                b = b - a;
+        }
+
+        return a;
     }
 }
