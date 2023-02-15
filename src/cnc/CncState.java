@@ -11,6 +11,11 @@ public class CncState {
     public static int absolute_Y;
     public static int absolute_Z;
 
+    //maximum Position
+    public static int maximum_X = 55*10*1000; // 55cm in microMeter
+    public static int maximum_Y = 50*10*1000; // 50cm in microMeter
+    public static int maximum_Z = 15*10*1000; // 15cm in microMeter
+
     // Relative Position
     public static int relative_X;
     public static int relative_Y;
