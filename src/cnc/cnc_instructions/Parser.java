@@ -101,6 +101,28 @@ public class Parser {
             double millimeterPixelRatio = new_w / (double)CncState.canvas_length;
             System.out.println("millimeterPixelRatio: " + millimeterPixelRatio);
 
+            String newSvg = "<svg width=\""+CncState.workpart_width+"mm\" height=\""+CncState.workpart_length+"mm\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
+            for (String[] path : this.svg) {
+                newSvg += "<path fill=\"white\" stroke=\"red\" stroke-width=\"2mm\" opacity=\"1.0\"\n d=\"";
+                for (String s : path) {
+                    if (s.equals("") || s == null) {
+                        continue;
+                    }
+                    if(s.equals("L") || s.equals("Q")){
+                        newSvg += " L ";
+                    } else if (s.equals("M")) {
+                        newSvg += " M ";
+                    } else {
+                        double temp = Double.valueOf(s);
+                        temp = temp * millimeterPixelRatio;
+                        newSvg += " " + temp;
+                    }
+                }
+                newSvg += " Z\"/>";
+            }
+            newSvg += "</svg>";
+
+            System.out.println(newSvg);
 
         } catch (IOException ex) {
             ex.printStackTrace();
