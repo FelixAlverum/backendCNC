@@ -70,11 +70,11 @@ public class Parser {
             System.out.println("CncState.workpart_length " + CncState.workpart_length);
             System.out.println("CncState.canvas_length " + CncState.canvas_length);
 
-            double pxCmScale = CncState.workpart_width / CncState.canvas_width;
+            double pxCmScale = (double) CncState.workpart_width / (double) CncState.canvas_width;
 
             System.out.println("pxCmScale " + pxCmScale);
 
-            if (pxCmScale > (CncState.workpart_length / CncState.canvas_length) ){
+            if (pxCmScale > ((double) CncState.workpart_length / (double)CncState.canvas_length) ){
                 pxCmScale = CncState.workpart_length / CncState.canvas_length;
             }
 
@@ -90,6 +90,16 @@ public class Parser {
 
             System.out.println("neue länge: " + pxCmScale + " /(" + CncState.canvas_length +"/"+ gcf +") = "+ new_w);
             System.out.println("neue länge: " + pxCmScale + " /(" + CncState.canvas_width +"/"+ gcf +") = "+ new_l);
+
+            // calculate offset
+            double offsetX = ((double)CncState.workpart_width - new_w) / 2;
+            double offsetY = ((double)CncState.workpart_length - new_l) / 2;
+
+            System.out.println("offsetX: " + offsetX);
+            System.out.println("offsetY: " + offsetY);
+
+            double millimeterPixelRatio = new_w / (double)CncState.canvas_length;
+            System.out.println("millimeterPixelRatio: " + millimeterPixelRatio);
 
 
         } catch (IOException ex) {
