@@ -62,8 +62,8 @@ public class ImportImagePanel extends JPanel {
 
                             Image dimg = bildAuswahl.getScaledInstance(bildAuswahl.getWidth(), bildAuswahl.getHeight(),Image.SCALE_SMOOTH);
                             if (bildAuswahl.getWidth() > (int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75) || bildAuswahl.getHeight() > (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75)) {
-
-                                System.out.println("TESTMANN ES LÄUFT");
+                                JOptionPane.showMessageDialog(bildLaden, "Bild ist zu groß zum Einfügen, bitte ein kleineres Bild auswählen",
+                                        "Bild-Import", JOptionPane.ERROR_MESSAGE);
                             } else {
                                 bildLaden.repaint();
                                 bildLaden.setIcon(new ImageIcon(dimg));

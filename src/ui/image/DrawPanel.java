@@ -119,7 +119,7 @@ public class DrawPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setBackground(Color.WHITE);
         g2d.clearRect(0, 0, getWidth(), getHeight());
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(new Color(239, 125, 14));
         if (saveG2d != null) {
             g2d.setColor(saveG2d.getColor());
             g2d.drawImage(saveImage, 0, 0, this);
@@ -131,7 +131,7 @@ public class DrawPanel extends JPanel {
         g2d.setBackground(Color.WHITE);
         g2d.clearRect(0, 0, getWidth(), getHeight());
         repaint();
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(new Color(239, 125, 14));
     }
 
 
@@ -151,9 +151,16 @@ public class DrawPanel extends JPanel {
                 } else if (s.equals("Löschen")) {
                     clearPaint();
                 } else if (s.equals("+")) {
-                    UI_CONST.brushSize += 2;
+                    System.out.println(UI_CONST.brushSize);
+                    if (UI_CONST.brushSize < 68) {
+                        UI_CONST.brushSize += 2;
+
+                    }
                 } else if (s.equals("-")) {
-                    UI_CONST.brushSize -= 2;
+                    System.out.println(UI_CONST.brushSize);
+                    if (UI_CONST.brushSize > 2) {
+                        UI_CONST.brushSize -= 2;
+                    }
                 }
             }
         };
@@ -162,18 +169,21 @@ public class DrawPanel extends JPanel {
         depth1.setBackground(new Color(239, 125, 14));
         depth1.setText(" ");
         depth1.addActionListener(actionHandler);
+        depth1.setToolTipText("Tiefeneinstellung 1");
         brushPanel.add(depth1);
 
         JButton depth2 = new JButton();
         depth2.setBackground(new Color(14, 239, 93));
         depth2.setText(" ");
         depth2.addActionListener(actionHandler);
+        depth2.setToolTipText("Tiefeneinstellung 2");
         brushPanel.add(depth2);
 
         JButton depth3 = new JButton();
         depth3.setBackground(new Color(101, 8, 136));
         depth3.setText(" ");
         depth3.addActionListener(actionHandler);
+        depth3.setToolTipText("Tiefeneinstellung 3");
         brushPanel.add(depth3);
 
         JButton clear = new JButton();
@@ -183,11 +193,13 @@ public class DrawPanel extends JPanel {
 
         JButton increaseBrushSize = new JButton();
         increaseBrushSize.setText("+");
+        increaseBrushSize.setToolTipText("Pinsel vergrößern");
         increaseBrushSize.addActionListener(actionHandler);
         brushPanel.add(increaseBrushSize);
 
         JButton decreaseBrushSize = new JButton();
         decreaseBrushSize.setText("-");
+        decreaseBrushSize.setToolTipText("Pinsel verkleinern");
         decreaseBrushSize.addActionListener(actionHandler);
         brushPanel.add(decreaseBrushSize);
 

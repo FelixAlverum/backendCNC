@@ -37,6 +37,20 @@ public class MainGUI extends JFrame {
         }catch (Exception e){
             e.printStackTrace();
         }
+        // Schlechte Look and Feel
+        try {
+            //wahrscheinlich "javax.swing.plaf.nimbus.NimbusLookAndFeel"
+            // vielleicht auch "com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (UnsupportedLookAndFeelException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         UI_CONST.cardLayout = new CardLayout();
         UI_CONST.showPanel = new JPanel();
