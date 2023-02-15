@@ -12,17 +12,10 @@ public class Instructions {
         int x = CncState.absolute_X, y = CncState.absolute_Y, z = CncState.absolute_Z;
 
         switch (axis.toUpperCase()) {
-            case "X":
-                x = x + micrometres;
-                break;
-            case "Y":
-                y = y + micrometres;
-                break;
-            case "Z":
-                z = z + micrometres;
-                break;
-            default:
-                throw new Exception("Achse: " + axis + " nicht bekannt.");
+            case "X" -> x = x + micrometres;
+            case "Y" -> y = y + micrometres;
+            case "Z" -> z = z + micrometres;
+            default -> throw new Exception("Achse: " + axis + " nicht bekannt.");
         }
 
         goCoordinate(x, y, z);
@@ -35,13 +28,13 @@ public class Instructions {
      */
     public void goCoordinate(int x, int y, int z) throws Exception {
         String command = "";
-
-        if (CncState.toolOn == true) {
-            command = "PA" + x + "," + y + "," + z + ";";
-        } else {
-            command = "GA" + x + "," + y + "," + z + ";";
-        }
-        CncState.CNC_CONNECTION.sendStringToComm(command);
+        if(compareWithBoundary(x,y,z)){
+            if (CncState.toolOn) {
+                command = "PA" + x + "," + y + "," + z + ";";
+            } else {
+                command = "GA" + x + "," + y + "," + z + ";";
+            }
+            CncState.CNC_CONNECTION.sendStringToComm(command);
 
         /*
         if (CncState.toolOn == true) {
@@ -52,9 +45,13 @@ public class Instructions {
         CncState.CNC_CONNECTION.sendStringToComm(command);
 */
 
-        CncState.absolute_X = x;
-        CncState.absolute_Y = y;
-        CncState.absolute_Z = z;
+            CncState.absolute_X = x;
+            CncState.absolute_Y = y;
+            CncState.absolute_Z = z;
+        }
+        else {
+            throw new Exception("WZM kann nicht über ihre Begrenzungen hinaus fahren");
+        }
 
     }
 
@@ -119,5 +116,13 @@ public class Instructions {
      */
     public void approximateCircle(int xStart, int yStart, int radius, int xEnd, int yEnd) {
 
+    }
+
+    private boolean compareWithBoundary (int x, int y, int z){
+        if(x >= CncState.maximum_X || y >=CncState.maximum_Y || z >= CncState.maximum_Z){
+            return false;
+        }else {
+            return true;
+        }
     }
 }
