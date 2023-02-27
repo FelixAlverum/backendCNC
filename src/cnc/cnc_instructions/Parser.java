@@ -102,14 +102,19 @@ public class Parser {
             System.out.println("millimeterPixelRatio: " + millimeterPixelRatio);
 
             String newSvg = "<svg width=\""+CncState.workpart_width+"mm\" height=\""+CncState.workpart_length+"mm\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
+
+            int qCase = 0;
+
             for (String[] path : this.svg) {
                 newSvg += "<path fill=\"white\" stroke=\"red\" stroke-width=\"2mm\" opacity=\"1.0\"\n d=\"";
                 for (String s : path) {
                     if (s.equals("") || s == null) {
                         continue;
                     }
-                    if(s.equals("L") || s.equals("Q")){
+                    if(s.equals("L")){
                         newSvg += " L ";
+                    } else if (s.equals("Q")) {
+                        newSvg += " L "; // TODO bei Q nur die nächsten 2 Werte übernehmen und nicht alle folgenden
                     } else if (s.equals("M")) {
                         newSvg += " M ";
                     } else {
@@ -121,6 +126,9 @@ public class Parser {
                 newSvg += " Z\"/>";
             }
             newSvg += "</svg>";
+
+
+
 
             System.out.println(newSvg);
 
