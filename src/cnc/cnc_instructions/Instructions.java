@@ -36,15 +36,6 @@ public class Instructions {
             }
             CncState.CNC_CONNECTION.sendStringToComm(command);
 
-        /*
-        if (CncState.toolOn == true) {
-            command = "PA,," + z + ";";
-        } else {
-            command = "GA,," + z + ";";
-        }
-        CncState.CNC_CONNECTION.sendStringToComm(command);
-*/
-
             CncState.absolute_X = x;
             CncState.absolute_Y = y;
             CncState.absolute_Z = z;
