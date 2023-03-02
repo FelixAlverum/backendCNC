@@ -70,35 +70,40 @@ public class Parser {
             System.out.println("CncState.workpart_length " + CncState.workpart_length);
             System.out.println("CncState.canvas_length " + CncState.canvas_length);
 
-            double pxCmScale = (double) CncState.workpart_width / (double) CncState.canvas_width;
+            double pxMmScale = (double) CncState.workpart_width / (double) CncState.canvas_width;
 
-            System.out.println("pxCmScale " + pxCmScale);
+            //System.out.println("pxMmScale " + pxMmScale);
 
-            if (pxCmScale > ((double) CncState.workpart_length / (double) CncState.canvas_length)) {
-                pxCmScale = CncState.workpart_length / CncState.canvas_length;
+            if (pxMmScale > ((double) CncState.workpart_length / (double) CncState.canvas_length)) {
+                pxMmScale = CncState.workpart_length / CncState.canvas_length;
             }
 
-            System.out.println("pxCmScale " + pxCmScale);
+            System.out.println("pxMmScale " + pxMmScale);
 
             // ratio
             double gcf = gcd(CncState.canvas_length, CncState.canvas_width);
-            System.out.println("GFC: " + gcf);
+            System.out.println("GFC: " + gcf);// Greatest common factor
 
             // calculate new width and length where the picture will be milled
-            double new_w = pxCmScale * (CncState.canvas_width / gcf);
-            double new_l = pxCmScale * (CncState.canvas_length / gcf);
+            double new_w = pxMmScale * (CncState.canvas_width / gcf);
+            double new_l = pxMmScale * (CncState.canvas_length / gcf);
 
-            System.out.println("neue länge: " + pxCmScale + " /(" + CncState.canvas_length + "/" + gcf + ") = " + new_w);
-            System.out.println("neue länge: " + pxCmScale + " /(" + CncState.canvas_width + "/" + gcf + ") = " + new_l);
+            System.out.println("neue länge: " + pxMmScale + " *(" + CncState.canvas_length + "/" + gcf + ") = " + new_w);
+            System.out.println("neue höhe: " + pxMmScale + " *(" + CncState.canvas_width + "/" + gcf + ") = " + new_l);
 
             // calculate offset
             double offsetX = ((double) CncState.workpart_width - new_w) / 2;
             double offsetY = ((double) CncState.workpart_length - new_l) / 2;
 
-            System.out.println("offsetX: " + offsetX);
+            System.out.println("offsetX: " + CncState.workpart_width +"-"+ new_w +"=" + offsetX);
             System.out.println("offsetY: " + offsetY);
 
-            double millimeterPixelRatio = new_w / (double) CncState.canvas_length;
+            double millimeterPixelRatio = new_w / (double) CncState.canvas_width;
+
+            if(millimeterPixelRatio > new_l / (double)  CncState.canvas_length){
+                millimeterPixelRatio = new_l / (double)  CncState.canvas_length;
+            }
+
             System.out.println("millimeterPixelRatio: " + millimeterPixelRatio);
 
             String newSvg = "<svg width=\"" + CncState.workpart_width + "mm\" height=\"" + CncState.workpart_length + "mm\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
@@ -149,21 +154,30 @@ public class Parser {
                         // --> Abstände sind so gering dass auch Linear gefräst werden kann
                         // Wichtig nur die ersten 2 Werte übernehmen
 
-                        int x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000);
-                        int y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000);
+                        int x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000) + ((int) offsetX *1000);
+                        int y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000) + ((int) offsetY *1000);
                         int z = -1;
 
                         // Koordinate in gCode einfügen
                         gCode.add(new int[]{x, y, z});
                     } else if (s.equals("M")) {
                         // Bewege den Fräskopf an einen neuen Punkt
+
+                        // Fahre Hoch
                         int x = -1;
                         int y = -1;
                         int z = -2;
                         gCode.add(new int[]{x, y, z});
 
+                        // Fahre An Punkt
                         x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000);
                         y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000);
+                        z = -1;
+                        gCode.add(new int[]{x, y, z});
+
+                        // Fahre runter
+                        x = -1;
+                        y = -1;
                         z = -3;
                         gCode.add(new int[]{x, y, z});
                     } else {
@@ -196,6 +210,7 @@ public class Parser {
             }
 
             //System.out.println(newSvg);
+
 
             for (int[] i : gCode) {
                 System.out.println("x: " + i[0] + "\ty: " + i[1] + "\tz: " + i[2]);
