@@ -19,8 +19,19 @@ public class Main {
         p.splitSvgCode();
 
         ArrayList<int[]> gcode = p.getgCode();
+        // verbinde dich mit COMPort
+        CncState.CNC_CONNECTION = new SerialAPI();
+        CncState.CNC_CONNECTION.initPort("COM4");
+        CncState.CNC_CONNECTION.openPort();
+        CncState.CNC_CONNECTION.initCNC();
 
-        i.goCoordinate(10000,10000,10000);
+        Instructions instructions = new Instructions();
+        instructions.setzeVorschub(10 * 1000);
+
+        i.startTool(1500);
+
+        i.goCoordinate(100000,100000,135000);
+        i.goCoordinate(100000,100000,136500);
 
         for (int[] koordinate:gcode) {
             if (koordinate[0] == -1){
@@ -38,7 +49,14 @@ public class Main {
             if (koordinate[2] == -3){
                 koordinate[2] = CncState.absolute_Z + 10 * 1000;
             }
-            i.goCoordinate(koordinate[0], koordinate[1], koordinate[2]);
+            int x  = koordinate[0];
+            int y  = koordinate[1];
+            int z  = koordinate[2];
+
+            i.goCoordinate(x , y , z);
         }
+
+        i.goCoordinate(0,0,0);
+
     }
 }

@@ -50,7 +50,7 @@ public class TestCncConnection {
             instructions.moveAxis("z", 50 * 1000);       // Gehe 50 mm nach unten
             instructions.goCoordinate(0, 0, 0);               // Zurück zum Nullpunkt
             //instructions.startTool(20000);              // Umdrehungen pro Minute einstellen
-            instructions.setzeVorschub(20 * 1000);                      // Vorschub setzen
+            instructions.setzeVorschub(10 * 1000);                      // Vorschub setzen
             instructions.goCoordinate(100 * 1000, 100 * 1000, 0);   // Gehe zu einer Koordinate
             instructions.stopTool();                                    // Spindel ausschalten
             instructions.goCoordinate(0, 0, 0);

@@ -20,6 +20,8 @@ public class Parser {
         // get the SVG as String --> batik jar bekommen
         // https://stackoverflow.com/questions/26027313/how-to-load-and-parse-svg-documents
 
+        int offsetWerkstueckAufCncX = 100000, offsetWerkstueckAufCncY = 100000;
+
         try {
             String content = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
             content = content.replaceAll("[\\t\\n\\r]+", " ");
@@ -154,8 +156,8 @@ public class Parser {
                         // --> Abstände sind so gering dass auch Linear gefräst werden kann
                         // Wichtig nur die ersten 2 Werte übernehmen
 
-                        int x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000) + ((int) offsetX *1000);
-                        int y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000) + ((int) offsetY *1000);
+                        int x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000) + ((int) offsetX *1000) + offsetWerkstueckAufCncX;
+                        int y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000) + ((int) offsetY *1000) + offsetWerkstueckAufCncY;
                         int z = -1;
 
                         // Koordinate in gCode einfügen
@@ -163,19 +165,19 @@ public class Parser {
                     } else if (s.equals("M")) {
                         // Bewege den Fräskopf an einen neuen Punkt
 
-                        // Fahre Hoch
+                        // Fahre an punkt hoch
                         int x = -1;
                         int y = -1;
                         int z = -2;
                         gCode.add(new int[]{x, y, z});
 
-                        // Fahre An Punkt
-                        x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000);
-                        y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000);
+                        // Fahre über neuen Punkt
+                        x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000) + ((int) offsetX *1000) + offsetWerkstueckAufCncX;
+                        y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000) + ((int) offsetY *1000) + offsetWerkstueckAufCncY;
                         z = -1;
                         gCode.add(new int[]{x, y, z});
 
-                        // Fahre runter
+                        // Fahre an Punkt runter
                         x = -1;
                         y = -1;
                         z = -3;
