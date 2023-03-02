@@ -44,6 +44,16 @@ public class ImportImagePanel extends JPanel {
         back.setMaximumSize(new Dimension(200, 200));
         importImage.add(back);
 
+        JButton weitergehts = new JButton(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.EXECUTE_IMAGE_PANEL);
+            }
+        });
+        weitergehts.setText("Fortfahren");
+        weitergehts.setMaximumSize(new Dimension(200, 200));
+        importImage.add(weitergehts);
+
         btnBrowse = new JButton(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
