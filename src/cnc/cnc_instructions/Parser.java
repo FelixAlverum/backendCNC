@@ -251,4 +251,8 @@ public class Parser {
 
         return a;
     }
+
+    public ArrayList<int[]> getgCode() {
+        return gCode;
+    }
 }
