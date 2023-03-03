@@ -4,13 +4,18 @@ import cnc.cnc_instructions.Instructions;
 import ui.res.UI_CONST;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class ControlPanel extends JPanel {
+public class ControlPanel extends JPanel implements ChangeListener {
 
-    private JLabel header;
-    private JButton xRechts, xLinks, yHoch, yRunter, zHoch, zRunter, toolSwitch, back;
+    private JLabel header, headerdrehen, headerschritt;
+    private JButton xRechts, xLinks, yHoch, yRunter, zHoch, zRunter, drehen, back;
+    private int pruefer = 0;
+    private int geschwindigkeit = 10000;
+    private int schrittweite = 5000;
     private GridBagConstraints constraints;
     private Instructions instructions;
 
@@ -20,6 +25,8 @@ public class ControlPanel extends JPanel {
     Icon iconYrunter = new ImageIcon("src/ui/y_runter.png");
     Icon iconZhoch = new ImageIcon("src/ui/z_hoch.png");
     Icon iconZrunter = new ImageIcon("src/ui/z_runter.png");
+    Icon iconDrehen = new ImageIcon("src/ui/drehen.png");
+
 
 
     public ControlPanel(){
@@ -37,12 +44,42 @@ public class ControlPanel extends JPanel {
         add(header,constraints);
 
         // Controller
+
+        //Schrittweite Slider
+        headerschritt = new JLabel("Schrittweite anpassen (mm)");
+        constraints.gridx = 0;
+        constraints.gridy = 5;
+        add(headerschritt,constraints);
+        //Slider Drehgeschwindigkeit
+        final int SCHRITT_MIN = 0;
+        final int SCHRITT_MAX = 10;
+        final int SCHRITT_INIT = 5;
+        JSlider schrittWeiteSlider = new JSlider(JSlider.HORIZONTAL,
+                SCHRITT_MIN, SCHRITT_MAX, SCHRITT_INIT);
+        schrittWeiteSlider.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider quelle = (JSlider)e.getSource();
+                schrittweite = quelle.getValue() * 1000;
+            }
+        });
+        schrittWeiteSlider.setMajorTickSpacing(1);
+        schrittWeiteSlider.setMinorTickSpacing(1);
+        schrittWeiteSlider.setPaintTicks(true);
+        schrittWeiteSlider.setPaintLabels(true);
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        add(schrittWeiteSlider, constraints);
+
+
+
         // X Rechts
         xRechts = new JButton(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("X", -250);
+                    instructions.moveAxis("X", schrittweite * (-1));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -56,7 +93,7 @@ public class ControlPanel extends JPanel {
         xRechts.setBorderPainted(false);
         xRechts.setFocusPainted(false);
         xRechts.setContentAreaFilled(false);
-        constraints.gridx = 4;
+        constraints.gridx = 6;
         constraints.gridy = 2;
         add(xRechts,constraints);
 
@@ -65,7 +102,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("X", 10 * 1000);
+                    instructions.moveAxis("X", schrittweite);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -79,7 +116,7 @@ public class ControlPanel extends JPanel {
         xLinks.setBorderPainted(false);
         xLinks.setFocusPainted(false);
         xLinks.setContentAreaFilled(false);
-        constraints.gridx = 2;
+        constraints.gridx = 4;
         constraints.gridy = 2;
         add(xLinks,constraints);
 
@@ -88,7 +125,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("Y", 10 * 1000);
+                    instructions.moveAxis("Y", schrittweite);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -102,7 +139,7 @@ public class ControlPanel extends JPanel {
         yHoch.setBorderPainted(false);
         yHoch.setFocusPainted(false);
         yHoch.setContentAreaFilled(false);
-        constraints.gridx = 3;
+        constraints.gridx = 5;
         constraints.gridy = 1;
         add(yHoch,constraints);
 
@@ -111,7 +148,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("Y", -10 * 1000);
+                    instructions.moveAxis("Y", schrittweite * (-1));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -125,7 +162,7 @@ public class ControlPanel extends JPanel {
         yRunter.setBorderPainted(false);
         yRunter.setFocusPainted(false);
         yRunter.setContentAreaFilled(false);
-        constraints.gridx = 3;
+        constraints.gridx = 5;
         constraints.gridy = 3;
         add(yRunter,constraints);
 
@@ -134,7 +171,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("Z", -10 * 500);
+                    instructions.moveAxis("Z", schrittweite * (-1));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -148,7 +185,7 @@ public class ControlPanel extends JPanel {
         zHoch.setBorderPainted(false);
         zHoch.setFocusPainted(false);
         zHoch.setContentAreaFilled(false);
-        constraints.gridx = 6;
+        constraints.gridx = 8;
         constraints.gridy = 1;
         add(zHoch,constraints);
 
@@ -157,7 +194,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("Z", 10 * 300);
+                    instructions.moveAxis("Z", schrittweite);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -171,10 +208,60 @@ public class ControlPanel extends JPanel {
         zRunter.setBorderPainted(false);
         zRunter.setFocusPainted(false);
         zRunter.setContentAreaFilled(false);
-        constraints.gridx = 6;
+        constraints.gridx = 8;
         constraints.gridy = 3;
         add(zRunter,constraints);
 
+        //Drehen des Werkzeugs
+        drehen = new JButton(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (pruefer == 0){
+                        instructions.startTool(geschwindigkeit);
+                        pruefer = 1;
+                    } else if (pruefer == 1){
+                        instructions.stopTool();
+                        pruefer = 0;
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        ImageIcon drehenIcon = new ImageIcon(getClass().getResource("drehen.png"));
+        Image drehenBild = drehenIcon.getImage();
+        Image skaliertDrehen = drehenBild.getScaledInstance(130, 130,  java.awt.Image.SCALE_SMOOTH);
+        drehenIcon = new ImageIcon(skaliertDrehen);
+        drehen.setIcon(drehenIcon);
+        drehen.setBorderPainted(false);
+        drehen.setFocusPainted(false);
+        drehen.setContentAreaFilled(false);
+        constraints.gridx = 5;
+        constraints.gridy = 2;
+        add(drehen,constraints);
+
+        //Slider Drehgeschwindigkeit
+        headerdrehen = new JLabel("<html>Drehgeschwindigkeit anpassen<br/>(*1000 Udr./min.)</html>", SwingConstants.CENTER);
+        constraints.gridx = 0;
+        constraints.gridy = 7;
+        add(headerdrehen,constraints);
+
+        final int DREH_MIN = 0;
+        final int DREH_MAX = 40;
+        final int DREH_INIT = 10;
+        JSlider drehGeschwindigkeit = new JSlider(JSlider.HORIZONTAL,
+                DREH_MIN, DREH_MAX, DREH_INIT);
+        drehGeschwindigkeit.addChangeListener(this);
+        drehGeschwindigkeit.setMajorTickSpacing(5);
+        drehGeschwindigkeit.setMinorTickSpacing(1);
+        drehGeschwindigkeit.setPaintTicks(true);
+        drehGeschwindigkeit.setPaintLabels(true);
+        constraints.gridx = 0;
+        constraints.gridy = 6;
+        add(drehGeschwindigkeit, constraints);
+
+        //this.geschwindigkeit = drehGeschwindigkeit.getValue() * 1000;
 
         // back button
         back = new JButton(new AbstractAction() {
@@ -183,9 +270,17 @@ public class ControlPanel extends JPanel {
                 UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.MAIN_PANEL);
             }
         });
+
         back.setText("Zurück");
-        constraints.gridx = 5;
+        constraints.gridx = 7;
         constraints.gridy = 5;
         add(back,constraints);
+    }
+
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        JSlider quelle = (JSlider)e.getSource();
+        this.geschwindigkeit = quelle.getValue() * 1000;
     }
 }
