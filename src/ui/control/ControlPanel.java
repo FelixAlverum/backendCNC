@@ -157,7 +157,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("Z", 10 * 500);
+                    instructions.moveAxis("Z", 10 * 300);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

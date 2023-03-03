@@ -20,7 +20,7 @@ public class Parser {
         // get the SVG as String --> batik jar bekommen
         // https://stackoverflow.com/questions/26027313/how-to-load-and-parse-svg-documents
 
-        int offsetWerkstueckAufCncX = 100000, offsetWerkstueckAufCncY = 100000;
+        int offsetWerkstueckAufCncX = 90000, offsetWerkstueckAufCncY = 10000;
 
         try {
             String content = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
@@ -40,6 +40,11 @@ public class Parser {
             }
 
             for (String[] path : this.svg) {
+                System.out.println("Pathlength : " + path.length);
+
+                if(path.length < 20){
+                    continue;
+                }
                 for (String s : path) {
                     if (s.equals("") || s == null) {
                         continue;

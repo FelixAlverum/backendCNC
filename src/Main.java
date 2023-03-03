@@ -26,12 +26,12 @@ public class Main {
         CncState.CNC_CONNECTION.initCNC();
 
         Instructions instructions = new Instructions();
-        instructions.setzeVorschub(10 * 1000);
+        instructions.setzeVorschub(30 * 1000);
 
-        i.startTool(1500);
+        i.startTool(15000);
 
-        i.goCoordinate(100000,100000,135000);
-        i.goCoordinate(100000,100000,136500);
+        i.goCoordinate(100000,100000,128000);
+        i.goCoordinate(100000,100000,130900);
 
         for (int[] koordinate:gcode) {
             if (koordinate[0] == -1){
@@ -57,6 +57,7 @@ public class Main {
         }
 
         i.goCoordinate(0,0,0);
+        i.stopTool();
 
     }
 }
