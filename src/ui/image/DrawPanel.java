@@ -12,9 +12,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.*;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
+import ui.image.DrawSetDataPanel;
 
 /**
  * https://wiki.byte-welt.net/wiki/Malen_in_Swing_Teil_2:_ein_einfaches_Malprogramm
@@ -27,7 +31,7 @@ public class DrawPanel extends JPanel {
     private GridBagConstraints gbc;
 
     private Point lastPoint;
-    private Image image;
+    public static Image image;
     private Graphics2D g2d;
 
 
@@ -119,7 +123,7 @@ public class DrawPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setBackground(Color.WHITE);
         g2d.clearRect(0, 0, getWidth(), getHeight());
-        g2d.setColor(new Color(239, 125, 14));
+        g2d.setColor(new Color(158, 158, 158));
         if (saveG2d != null) {
             g2d.setColor(saveG2d.getColor());
             g2d.drawImage(saveImage, 0, 0, this);
@@ -131,7 +135,7 @@ public class DrawPanel extends JPanel {
         g2d.setBackground(Color.WHITE);
         g2d.clearRect(0, 0, getWidth(), getHeight());
         repaint();
-        g2d.setColor(new Color(239, 125, 14));
+        g2d.setColor(new Color(158, 158, 158));
     }
 
 
@@ -166,21 +170,21 @@ public class DrawPanel extends JPanel {
         };
 
         JButton depth1 = new JButton();
-        depth1.setBackground(new Color(239, 125, 14));
+        depth1.setBackground(new Color(158, 158, 158));
         depth1.setText(" ");
         depth1.addActionListener(actionHandler);
         depth1.setToolTipText("Tiefeneinstellung 1");
         brushPanel.add(depth1);
 
         JButton depth2 = new JButton();
-        depth2.setBackground(new Color(14, 239, 93));
+        depth2.setBackground(new Color(91, 91, 91));
         depth2.setText(" ");
         depth2.addActionListener(actionHandler);
         depth2.setToolTipText("Tiefeneinstellung 2");
         brushPanel.add(depth2);
 
         JButton depth3 = new JButton();
-        depth3.setBackground(new Color(101, 8, 136));
+        depth3.setBackground(new Color(0, 0, 0));
         depth3.setText(" ");
         depth3.addActionListener(actionHandler);
         depth3.setToolTipText("Tiefeneinstellung 3");
@@ -235,7 +239,7 @@ public class DrawPanel extends JPanel {
                 try {
                     //ImageIO.write((RenderedImage) image, "png", new File("./src/Test/DrawPanelPNG.png"));
 
-                    // TODO Twaek Options
+                    // TODO Tweek Options
                     HashMap<String, Float> options = new HashMap<String, Float>();
 
                     // Tracing
@@ -259,7 +263,7 @@ public class DrawPanel extends JPanel {
 
                     // Selective Gauss Blur
                     options.put("blurradius", 0f); // 0f means deactivated; 1f .. 5f : blur with this radius
-                    options.put("blurdelta", 20f); // smaller than this RGB difference will be blurred
+                    options.put("blurdelta", 50f); // smaller than this RGB difference will be blurred
 
                     // Palette TODO für import
                     // This is an example of a grayscale palette
@@ -303,7 +307,17 @@ public class DrawPanel extends JPanel {
         JButton next = new JButton(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.DRAW_SET_DATA_PANEL);
+                try {
+                    ImageIO.write((RenderedImage) image, "png", new File("./src/Test/testguy.png"));
+                    TimeUnit.SECONDS.sleep(1);
+                    DrawSetDataPanel testo = new DrawSetDataPanel<>();
+                    testo.initDrawSetDataPanel();
+                    UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.DRAW_SET_DATA_PANEL);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         next.setText("Weiter");
