@@ -30,7 +30,7 @@ public class Parser {
             String content = new String(contentSVG.getBytes("UTF-16"), "UTF-16");
             content = content.replaceAll("[\\t\\n\\r]", " ");
 
-            System.out.println(content);
+            //System.out.println(content);
 
             while (content.contains("d=\"")) {
 
@@ -46,12 +46,6 @@ public class Parser {
                 content = content.substring(content.indexOf("Z\" />") + 4);
             }
 
-            for (String[] sArr : svg) {
-                for (String sStr : sArr) {
-                    System.out.print(sStr + " ");
-                }
-                System.out.println();
-            }
 
             // Resize coordinates
             // TODO Angabe über Frontend - Workpart in mm
@@ -130,7 +124,9 @@ public class Parser {
                 newSvg += " Z\"/>";
             }
             newSvg += "</svg>";
-            System.out.println(newSvg);
+            //System.out.println(newSvg);
+
+            // TODO kalkuliere die gefahrene Distanz dann alles unter X Millimeter löschen
 
             // G-Code Koordinaten kalkulieren für goCoordinate Befehle
             for (int path = 0; path < svg.size(); path++) {
@@ -138,7 +134,7 @@ public class Parser {
                 int i = 0;
 
                 //Skip unnecesary coordinates
-                if (svg.get(path).length < 25) {
+                if (svg.get(path).length < 10) {
                     continue;
                 }
                 while (i < svg.get(path).length) {
