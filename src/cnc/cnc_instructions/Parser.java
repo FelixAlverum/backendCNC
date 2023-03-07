@@ -2,11 +2,13 @@ package cnc.cnc_instructions;
 
 import cnc.CncState;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Parser {
     /**
@@ -21,23 +23,34 @@ public class Parser {
         // https://stackoverflow.com/questions/26027313/how-to-load-and-parse-svg-documents
 
         // TODO in CNC State übertragen und im Frontend eintragen --> Vielleicht als Virtuelen Nullpunkt setzen
-        int offsetWerkstueckAufCncX = 40000, offsetWerkstueckAufCncY = 20000, offsetWerkstueckAufCncZ =0;
+        int offsetWerkstueckAufCncX = 40000, offsetWerkstueckAufCncY = 20000, offsetWerkstueckAufCncZ = 0;
 
         try {
-            String content = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
-            content = content.replaceAll("[\\t\\n\\r]+", " ");
+            String contentSVG = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
+            String content = new String(contentSVG.getBytes("UTF-16"), "UTF-16");
+            content = content.replaceAll("[\\t\\n\\r]", " ");
+
+            System.out.println(content);
 
             while (content.contains("d=\"")) {
+
                 int d = content.indexOf("d=\"") + 3;
                 if (d == -1) {
                     d = 0;
                 }
-                int z = content.indexOf("Z\"/>");
+                int z = content.indexOf("Z\" />");
                 if (z == -1) {
                     z = content.length();
                 }
                 this.svg.add(content.substring(d, z).split(" "));
-                content = content.substring(content.indexOf("Z\"/>") + 4);
+                content = content.substring(content.indexOf("Z\" />") + 4);
+            }
+
+            for (String[] sArr : svg) {
+                for (String sStr : sArr) {
+                    System.out.print(sStr + " ");
+                }
+                System.out.println();
             }
 
             // Resize coordinates
@@ -83,18 +96,18 @@ public class Parser {
             double offsetX = ((double) CncState.workpart_width - new_w) / 2;
             double offsetY = ((double) CncState.workpart_length - new_l) / 2;
 
-            System.out.println("offsetX: " + CncState.workpart_width +"-"+ new_w +"=" + offsetX);
+            System.out.println("offsetX: " + CncState.workpart_width + "-" + new_w + "=" + offsetX);
             System.out.println("offsetY: " + offsetY);
 
             double millimeterPixelRatio = new_w / (double) CncState.canvas_width;
 
-            if(millimeterPixelRatio > new_l / (double)  CncState.canvas_length){
-                millimeterPixelRatio = new_l / (double)  CncState.canvas_length;
+            if (millimeterPixelRatio > new_l / (double) CncState.canvas_length) {
+                millimeterPixelRatio = new_l / (double) CncState.canvas_length;
             }
 
             System.out.println("millimeterPixelRatio: " + millimeterPixelRatio);
 
-            String newSvg = "<svg width=\"" + CncState.workpart_width*2 + "\" height=\"" + CncState.workpart_length*2 + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
+            String newSvg = "<svg width=\"" + CncState.workpart_width * 2 + "\" height=\"" + CncState.workpart_length * 2 + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
 
             for (String[] path : this.svg) {
                 newSvg += "<path fill=\"white\" stroke=\"red\" stroke-width=\"1\" opacity=\"1.0\"\n d=\"";
@@ -109,7 +122,7 @@ public class Parser {
                     } else if (s.equals("M")) {
                         newSvg += " M ";
                     } else {
-                        double temp = Double.valueOf(s)*2;
+                        double temp = Double.valueOf(s) * 2;
                         temp = temp * millimeterPixelRatio;
                         newSvg += " " + temp;
                     }
@@ -125,7 +138,7 @@ public class Parser {
                 int i = 0;
 
                 //Skip unnecesary coordinates
-                if(svg.get(path).length < 25){
+                if (svg.get(path).length < 25) {
                     continue;
                 }
                 while (i < svg.get(path).length) {
@@ -147,8 +160,8 @@ public class Parser {
                         // --> Abstände sind so gering dass auch Linear gefräst werden kann
                         // Wichtig nur die ersten 2 Werte übernehmen
 
-                        int x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000) + ((int) offsetX *1000) + offsetWerkstueckAufCncX;
-                        int y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000) + ((int) offsetY *1000) + offsetWerkstueckAufCncY;
+                        int x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000) + ((int) offsetX * 1000) + offsetWerkstueckAufCncX;
+                        int y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000) + ((int) offsetY * 1000) + offsetWerkstueckAufCncY;
                         int z = -1;
 
                         // Koordinate in gCode einfügen
@@ -163,8 +176,8 @@ public class Parser {
                         gCode.add(new int[]{x, y, z});
 
                         // Fahre über neuen Punkt
-                        x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000) + ((int) offsetX *1000) + offsetWerkstueckAufCncX;
-                        y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000) + ((int) offsetY *1000) + offsetWerkstueckAufCncY;
+                        x = (int) Math.floor(Double.valueOf(svg.get(path)[i + 1]) * millimeterPixelRatio * 1000) + ((int) offsetX * 1000) + offsetWerkstueckAufCncX;
+                        y = (int) Math.floor(Double.valueOf(svg.get(path)[i + 2]) * millimeterPixelRatio * 1000) + ((int) offsetY * 1000) + offsetWerkstueckAufCncY;
                         z = -1;
                         gCode.add(new int[]{x, y, z});
 
@@ -180,17 +193,17 @@ public class Parser {
 
                     // Neuen Index herausfinden
                     int j = 2;
-                    if((i+j) >= svg.get(path).length){
+                    if ((i + j) >= svg.get(path).length) {
                         break;
                     }
                     while (!isString(svg.get(path)[i + j]) && (i + j < svg.get(path).length)) {
                         j++;
-                        if(i+j >= svg.get(path).length){
+                        if (i + j >= svg.get(path).length) {
                             break;
                         }
                     }
                     i = i + j;      // Index auf den neuen String (nächsten Befehl) setzen
-                    if(i >= svg.get(path).length){
+                    if (i >= svg.get(path).length) {
                         break;
                     }
                 }

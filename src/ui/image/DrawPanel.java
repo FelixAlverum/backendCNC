@@ -265,17 +265,6 @@ public class DrawPanel extends JPanel {
                     options.put("blurradius", 0f); // 0f means deactivated; 1f .. 5f : blur with this radius
                     options.put("blurdelta", 50f); // smaller than this RGB difference will be blurred
 
-                    // Palette TODO für import
-                    // This is an example of a grayscale palette
-                    // please note that signed byte values [ -128 .. 127 ] will be converted to [ 0 .. 255 ] in the getsvgstring function
-//                    byte[][] palette = new byte[8][4];
-//                    for (int colorcnt = 0; colorcnt < 8; colorcnt++) {
-//                        palette[colorcnt][0] = (byte) (-128 + colorcnt * 32); // R
-//                        palette[colorcnt][1] = (byte) (-128 + colorcnt * 32); // G
-//                        palette[colorcnt][2] = (byte) (-128 + colorcnt * 32); // B
-//                        palette[colorcnt][3] = (byte) 127;              // A
-//                    }
-
                     ImageTracer.saveString("./src/Test/DrawPanelSVG.svg", ImageTracer.imageToSVG("./src/Test/DrawPanelPNG.png", options, null));
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
