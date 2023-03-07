@@ -20,7 +20,8 @@ public class Parser {
         // get the SVG as String --> batik jar bekommen
         // https://stackoverflow.com/questions/26027313/how-to-load-and-parse-svg-documents
 
-        int offsetWerkstueckAufCncX = 90000, offsetWerkstueckAufCncY = 10000;
+        // TODO in CNC State übertragen und im Frontend eintragen --> Vielleicht als Virtuelen Nullpunkt setzen
+        int offsetWerkstueckAufCncX = 40000, offsetWerkstueckAufCncY = 20000, offsetWerkstueckAufCncZ =0;
 
         try {
             String content = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
@@ -39,24 +40,10 @@ public class Parser {
                 content = content.substring(content.indexOf("Z\"/>") + 4);
             }
 
-            for (String[] path : this.svg) {
-                System.out.println("Pathlength : " + path.length);
-
-                if(path.length < 20){
-                    continue;
-                }
-                for (String s : path) {
-                    if (s.equals("") || s == null) {
-                        continue;
-                    }
-                    // System.out.println(s);
-                }
-            }
-
             // Resize coordinates
-            // Workpart in mm
-            CncState.workpart_width = 150;
-            CncState.workpart_length = 100;
+            // TODO Angabe über Frontend - Workpart in mm
+            CncState.workpart_width = 280;
+            CncState.workpart_length = 380;
             CncState.workpart_depth = 5;
 
             // Canvas in px
@@ -79,24 +66,18 @@ public class Parser {
 
             double pxMmScale = (double) CncState.workpart_width / (double) CncState.canvas_width;
 
-            //System.out.println("pxMmScale " + pxMmScale);
-
+            System.out.println("pxMmScale (width) " + pxMmScale);
             if (pxMmScale > ((double) CncState.workpart_length / (double) CncState.canvas_length)) {
                 pxMmScale = CncState.workpart_length / CncState.canvas_length;
+                System.out.println("pxMmScale (length) " + pxMmScale);
             }
+            System.out.println("pxMmScale (final) " + pxMmScale);
 
-            System.out.println("pxMmScale " + pxMmScale);
+            double new_w = pxMmScale * CncState.canvas_width;
+            double new_l = pxMmScale * CncState.canvas_length;
 
-            // ratio
-            double gcf = gcd(CncState.canvas_length, CncState.canvas_width);
-            System.out.println("GFC: " + gcf);// Greatest common factor
-
-            // calculate new width and length where the picture will be milled
-            double new_w = pxMmScale * (CncState.canvas_width / gcf);
-            double new_l = pxMmScale * (CncState.canvas_length / gcf);
-
-            System.out.println("neue länge: " + pxMmScale + " *(" + CncState.canvas_length + "/" + gcf + ") = " + new_w);
-            System.out.println("neue höhe: " + pxMmScale + " *(" + CncState.canvas_width + "/" + gcf + ") = " + new_l);
+            System.out.println("neue länge: " + pxMmScale + " * " + CncState.canvas_length + " = " + new_w);
+            System.out.println("neue höhe: " + pxMmScale + " * " + CncState.canvas_width + " = " + new_l);
 
             // calculate offset
             double offsetX = ((double) CncState.workpart_width - new_w) / 2;
@@ -113,10 +94,10 @@ public class Parser {
 
             System.out.println("millimeterPixelRatio: " + millimeterPixelRatio);
 
-            String newSvg = "<svg width=\"" + CncState.workpart_width + "mm\" height=\"" + CncState.workpart_length + "mm\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
+            String newSvg = "<svg width=\"" + CncState.workpart_width*2 + "\" height=\"" + CncState.workpart_length*2 + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
 
             for (String[] path : this.svg) {
-                newSvg += "<path fill=\"white\" stroke=\"red\" stroke-width=\"2mm\" opacity=\"1.0\"\n d=\"";
+                newSvg += "<path fill=\"white\" stroke=\"red\" stroke-width=\"1\" opacity=\"1.0\"\n d=\"";
                 for (String s : path) {
                     if (s.equals("") || s == null) {
                         continue;
@@ -124,11 +105,11 @@ public class Parser {
                     if (s.equals("L")) {
                         newSvg += " L ";
                     } else if (s.equals("Q")) {
-                        newSvg += " L "; // TODO bei Q nur die nächsten 2 Werte übernehmen und nicht alle folgenden
+                        newSvg += " L ";
                     } else if (s.equals("M")) {
                         newSvg += " M ";
                     } else {
-                        double temp = Double.valueOf(s);
+                        double temp = Double.valueOf(s)*2;
                         temp = temp * millimeterPixelRatio;
                         newSvg += " " + temp;
                     }
@@ -136,12 +117,17 @@ public class Parser {
                 newSvg += " Z\"/>";
             }
             newSvg += "</svg>";
-
+            System.out.println(newSvg);
 
             // G-Code Koordinaten kalkulieren für goCoordinate Befehle
             for (int path = 0; path < svg.size(); path++) {
                 svg.get(path);
                 int i = 0;
+
+                //Skip unnecesary coordinates
+                if(svg.get(path).length < 25){
+                    continue;
+                }
                 while (i < svg.get(path).length) {
                     String s = svg.get(path)[i];
 
@@ -193,34 +179,27 @@ public class Parser {
                     }
 
                     // Neuen Index herausfinden
-
                     int j = 2;
-
                     if((i+j) >= svg.get(path).length){
                         break;
                     }
-
                     while (!isString(svg.get(path)[i + j]) && (i + j < svg.get(path).length)) {
                         j++;
                         if(i+j >= svg.get(path).length){
                             break;
                         }
                     }
-
                     i = i + j;      // Index auf den neuen String (nächsten Befehl) setzen
                     if(i >= svg.get(path).length){
                         break;
                     }
-
                 }
-
             }
 
-            //System.out.println(newSvg);
-
+            System.out.println("Anzahl Befehle " + gCode.size());
 
             for (int[] i : gCode) {
-                System.out.println("x: " + i[0] + "\ty: " + i[1] + "\tz: " + i[2]);
+                //System.out.println("x: " + i[0] + "\ty: " + i[1] + "\tz: " + i[2]);
             }
 
         } catch (IOException ex) {

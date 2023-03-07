@@ -34,9 +34,6 @@ public class TestCncConnection {
             CncState.CNC_CONNECTION.initCNC();
 
             // Testprogramm
-
-            //Thread.sleep(10 * 1000);
-
             Instructions instructions = new Instructions();
             instructions.goCoordinate(0, 0, 0);               // Zurück zum Nullpunkt
             instructions.goCoordinate(30 * 10 * 1000, 30 * 10 * 1000, 1000);      // Gehe zu koordinate

@@ -42,7 +42,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("X", -250);
+                    instructions.moveAxis("X", -10 * 1000);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

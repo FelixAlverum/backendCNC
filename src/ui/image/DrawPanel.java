@@ -249,7 +249,7 @@ public class DrawPanel extends JPanel {
 
                     // Color quantization
                     options.put("colorsampling", 1f); // 1f means true ; 0f means false: starting with generated palette
-                    options.put("numberofcolors", 8f);
+                    options.put("numberofcolors", 16f);
                     options.put("mincolorratio", 0.02f);
                     options.put("colorquantcycles", 8f);
 
