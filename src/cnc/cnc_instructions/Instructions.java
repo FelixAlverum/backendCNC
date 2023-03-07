@@ -28,7 +28,7 @@ public class Instructions {
      */
     public void goCoordinate(int x, int y, int z) throws Exception {
         String command = "";
-        if(compareWithBoundary(x,y,z)){
+        if (compareWithBoundary(x, y, z)) {
             if (CncState.toolOn) {
                 command = "PA" + x + "," + y + "," + z + ";";
             } else {
@@ -48,9 +48,8 @@ public class Instructions {
             CncState.absolute_X = x;
             CncState.absolute_Y = y;
             CncState.absolute_Z = z;
-        }
-        else {
-            throw new Exception("WZM kann nicht über ihre Begrenzungen hinaus fahren");
+        } else {
+            throw new Exception("WZM kann nicht über die Begrenzungen hinaus fahren");
         }
 
     }
@@ -118,11 +117,7 @@ public class Instructions {
 
     }
 
-    private boolean compareWithBoundary (int x, int y, int z){
-        if(x >= CncState.maximum_X || y >=CncState.maximum_Y || z >= CncState.maximum_Z){
-            return false;
-        }else {
-            return true;
-        }
+    private boolean compareWithBoundary(int x, int y, int z) {
+        return (x < CncState.maximum_X || y < CncState.maximum_Y || z < CncState.maximum_Z);
     }
 }
