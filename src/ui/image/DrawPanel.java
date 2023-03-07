@@ -239,7 +239,7 @@ public class DrawPanel extends JPanel {
                 try {
                     //ImageIO.write((RenderedImage) image, "png", new File("./src/Test/DrawPanelPNG.png"));
 
-                    // TODO Twaek Options
+                    // TODO Tweek Options
                     HashMap<String, Float> options = new HashMap<String, Float>();
 
                     // Tracing
@@ -263,7 +263,7 @@ public class DrawPanel extends JPanel {
 
                     // Selective Gauss Blur
                     options.put("blurradius", 0f); // 0f means deactivated; 1f .. 5f : blur with this radius
-                    options.put("blurdelta", 20f); // smaller than this RGB difference will be blurred
+                    options.put("blurdelta", 50f); // smaller than this RGB difference will be blurred
 
                     // Palette TODO für import
                     // This is an example of a grayscale palette
