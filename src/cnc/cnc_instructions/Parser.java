@@ -137,9 +137,11 @@ public class Parser {
                 int i = 0;
 
                 //Skip unnecesary coordinates
-                if (svg.get(path).length < 10) {
+                //calculatePathLength(svg.get(path), millimeterPixelRatio);
+                if (calculatePathLength(svg.get(path), millimeterPixelRatio) < 5.0) {
                     continue;
                 }
+
                 while (i < svg.get(path).length) {
                     String s = svg.get(path)[i];
 
@@ -229,25 +231,57 @@ public class Parser {
         return true;
     }
 
-    public void resizeCoordinates(File svg) {
+    private double calculatePathLength(String[] path, double millimeterPixelRatio){
+        ArrayList<int[]> calcPath = new ArrayList<>();
+        int i =0;
 
-    }
+        while (i < path.length) {
+            String s = path[i];
 
-    /*
-     * Größter gemeinsamer Faktor
-     */
-    private int gcd(int a, int b) {
-        if (a == 0)
-            return b;
+            // Mache nichs wenn leeres Feld
+            if (s.equals("") || s == null) {
+                continue;
+            }
 
-        while (b != 0) {
-            if (a > b)
-                a = a - b;
-            else
-                b = b - a;
+            if (s.equals("L") || s.equals("Q") || s.equals("M")) {
+                int x = (int)(Math.floor(Double.parseDouble(path[i + 1]) * millimeterPixelRatio));
+                int y = (int)(Math.floor(Double.parseDouble(path[i + 2]) * millimeterPixelRatio));
+
+                calcPath.add(new int[]{x, y});
+            } else {
+                // Fehlermeldung + Einfach ignorieren
+                System.out.println("EGAL: " + s);
+            }
+
+            // Neuen Index herausfinden
+            int j = 2;
+            if ((i + j) >= path.length) {
+                break;
+            }
+            while (!isString(path[i + j]) && (i + j < path.length)) {
+                j++;
+                if (i + j >= path.length) {
+                    break;
+                }
+            }
+            i = i + j;      // Index auf den neuen String (nächsten Befehl) setzen
+            if (i >= path.length) {
+                break;
+            }
         }
 
-        return a;
+        double length = 0.0;
+        // Calculate path length
+        for (i = 0; i < calcPath.size()-1; i++) {
+            int[] cord1 = calcPath.get(i), cord2 = calcPath.get(i+1);
+            //System.out.print("x: " +cord1[0] + " y: " +cord1[1] + "; x: " +cord2[0] + " y: " +cord2[1]);
+            double deltaX = cord1[0] - cord2[0], deltaY= cord1[1] - cord2[1];
+            double temp = deltaX*deltaX+deltaY*deltaY;
+            length = length + Math.sqrt(temp);
+        }
+
+        System.out.println("Länge des Pfads: " + length);
+        return length;
     }
 
     public ArrayList<int[]> getgCode() {
