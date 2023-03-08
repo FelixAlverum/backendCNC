@@ -18,7 +18,7 @@ public class Parser {
     private ArrayList<int[]> gCode = new ArrayList<int[]>();
     private ArrayList<String[]> svg = new ArrayList<String[]>();
 
-    public void splitSvgCode() throws IOException {
+    public void splitSvgCode(String content) throws IOException {
         // get the SVG as String --> batik jar bekommen
         // https://stackoverflow.com/questions/26027313/how-to-load-and-parse-svg-documents
 
@@ -26,11 +26,19 @@ public class Parser {
         int offsetWerkstueckAufCncX = 40000, offsetWerkstueckAufCncY = 20000, offsetWerkstueckAufCncZ = 0;
 
         try {
-            String contentSVG = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
-            String content = new String(contentSVG.getBytes("UTF-16"), "UTF-16");
+            //String contentSVG = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
+            //String content = new String(contentSVG.getBytes("UTF-16"), "UTF-16");
             content = content.replaceAll("[\\t\\n\\r]", " ");
 
             //System.out.println(content);
+
+            int start = content.indexOf("width") + 7;
+            int end = content.indexOf("\" height");
+            CncState.canvas_width = Integer.parseInt(content.substring(start, end));
+
+            start = content.indexOf("height") + 8;
+            end = content.indexOf("\" version");
+            CncState.canvas_length = Integer.parseInt(content.substring(start, end));
 
             while (content.contains("d=\"")) {
 
@@ -53,17 +61,6 @@ public class Parser {
             CncState.workpart_length = 380;
             CncState.workpart_depth = 5;
 
-            // Canvas in px
-            content = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
-            content = content.replaceAll("[\\t\\n\\r]+", " ");
-
-            int start = content.indexOf("width") + 7;
-            int end = content.indexOf("\" height");
-            CncState.canvas_width = Integer.valueOf(content.substring(start, end));
-
-            start = content.indexOf("height") + 8;
-            end = content.indexOf("\" version");
-            CncState.canvas_length = Integer.valueOf(content.substring(start, end));
 
             // scale
             System.out.println("CncState.workpart_width " + CncState.workpart_width);
@@ -127,7 +124,7 @@ public class Parser {
                 newSvg += " Z\"/>";
             }
             newSvg += "</svg>";
-            System.out.println(newSvg);
+            //System.out.println(newSvg);
 
             // TODO kalkuliere die gefahrene Distanz dann alles unter X Millimeter löschen
 
@@ -216,7 +213,7 @@ public class Parser {
                 //System.out.println("x: " + i[0] + "\ty: " + i[1] + "\tz: " + i[2]);
             }
 
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -280,7 +277,7 @@ public class Parser {
             length = length + Math.sqrt(temp);
         }
 
-        System.out.println("Länge des Pfads: " + length);
+        //System.out.println("Länge des Pfads: " + length);
         return length;
     }
 
