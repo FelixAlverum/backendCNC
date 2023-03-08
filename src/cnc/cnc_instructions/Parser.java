@@ -26,8 +26,8 @@ public class Parser {
         int offsetWerkstueckAufCncX = 40000, offsetWerkstueckAufCncY = 20000, offsetWerkstueckAufCncZ = 0;
 
         try {
-            //String contentSVG = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
-            //String content = new String(contentSVG.getBytes("UTF-16"), "UTF-16");
+            String contentSVG = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
+            content = new String(contentSVG.getBytes("UTF-16"), "UTF-16");
             content = content.replaceAll("[\\t\\n\\r]", " ");
 
             //System.out.println(content);
@@ -135,7 +135,7 @@ public class Parser {
 
                 //Skip unnecesary coordinates
                 //calculatePathLength(svg.get(path), millimeterPixelRatio);
-                if (calculatePathLength(svg.get(path), millimeterPixelRatio) < 5.0) {
+                if (calculatePathLength(svg.get(path), millimeterPixelRatio) < 5.0 || svg.get(path).length < 25) {
                     continue;
                 }
 

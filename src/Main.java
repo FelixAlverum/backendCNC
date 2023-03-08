@@ -41,6 +41,8 @@ public class Main {
         options.put("blurradius", 0f); // 0f means deactivated; 1f .. 5f : blur with this radius
         options.put("blurdelta", 50f); // smaller than this RGB difference will be blurred
 
+        ImageTracer.saveString("./src/Test/DrawPanelSVG.svg", ImageTracer.imageToSVG("./src/Test/DrawPanelPNG.png", options, null));
+
         String content = ImageTracer.imageToSVG("./src/Test/DrawPanelPNG.png", options, null);
 
 
