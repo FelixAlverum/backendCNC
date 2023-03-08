@@ -104,6 +104,9 @@ public class Parser {
             String newSvg = "<svg width=\"" + CncState.workpart_width * 2 + "\" height=\"" + CncState.workpart_length * 2 + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n";
 
             for (String[] path : this.svg) {
+                if (path.length < 20) {
+                    continue;
+                }
                 newSvg += "<path fill=\"white\" stroke=\"red\" stroke-width=\"1\" opacity=\"1.0\"\n d=\"";
                 for (String s : path) {
                     if (s.equals("") || s == null) {
@@ -124,7 +127,7 @@ public class Parser {
                 newSvg += " Z\"/>";
             }
             newSvg += "</svg>";
-            //System.out.println(newSvg);
+            System.out.println(newSvg);
 
             // TODO kalkuliere die gefahrene Distanz dann alles unter X Millimeter löschen
 
