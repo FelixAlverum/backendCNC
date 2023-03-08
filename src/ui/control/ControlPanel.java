@@ -1,5 +1,6 @@
 package ui.control;
 
+import cnc.CncState;
 import cnc.cnc_instructions.Instructions;
 import ui.res.UI_CONST;
 
@@ -13,11 +14,13 @@ public class ControlPanel extends JPanel implements ChangeListener {
 
     private JLabel header, headerdrehen, headerschritt;
     private JButton xRechts, xLinks, yHoch, yRunter, zHoch, zRunter, drehen, back;
+    private JTextField aktuellex, aktuelley, aktuellez;
     private int pruefer = 0;
     private int geschwindigkeit = 10000;
     private int schrittweite = 5000;
     private GridBagConstraints constraints;
     private Instructions instructions;
+    int xaktuell = CncState.absolute_X, yaktuell = CncState.absolute_Y, zaktuell = CncState.absolute_Z;
 
     Icon iconXlinks = new ImageIcon("src/ui/x_links.png");
     Icon iconXrechts = new ImageIcon("src/ui/x_rechts.png");
@@ -42,6 +45,31 @@ public class ControlPanel extends JPanel implements ChangeListener {
         constraints.gridx = 5;
         constraints.gridy = 0;
         add(header,constraints);
+
+        //Ausgabe x Koordinate
+        aktuellex = new JTextField();
+        aktuellex.setText("X0");
+        aktuellex.setToolTipText("X-Koordinaten");
+        aktuellex.setColumns(7);
+        constraints.gridx = 10;
+        constraints.gridy = 2;
+        add(aktuellex, constraints);
+        //Ausgabe y Koordinate
+        aktuelley = new JTextField();
+        aktuelley.setText("Y0");
+        aktuelley.setToolTipText("Y-Koordinaten");
+        aktuelley.setColumns(7);
+        constraints.gridx = 10;
+        constraints.gridy = 3;
+        add(aktuelley, constraints);
+        //Ausgabe z Koordinate
+        aktuellez = new JTextField();
+        aktuellez.setText("Z0");
+        aktuellez.setToolTipText("Z-Koordinaten");
+        aktuellez.setColumns(7);
+        constraints.gridx = 10;
+        constraints.gridy = 4;
+        add(aktuellez, constraints);
 
         // Controller
 
@@ -79,7 +107,14 @@ public class ControlPanel extends JPanel implements ChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("X", schrittweite * (-1));
+                    if(schrittweite <= CncState.absolute_X) {
+                        instructions.moveAxis("X", schrittweite * (-1));
+                        aktuellex.setText("X" + String.valueOf(CncState.absolute_X));
+                        aktuellex.repaint();
+                    }else{
+                        JOptionPane.showMessageDialog(header, "X-Wert darf nicht negativ sein. Bitte kleinere Schrittweite wählen",
+                                "CNC-Steuerung", JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -103,6 +138,8 @@ public class ControlPanel extends JPanel implements ChangeListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     instructions.moveAxis("X", schrittweite);
+                    aktuellex.setText("X"+String.valueOf(CncState.absolute_X));
+                    aktuellex.repaint();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -126,6 +163,8 @@ public class ControlPanel extends JPanel implements ChangeListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     instructions.moveAxis("Y", schrittweite);
+                    aktuelley.setText("Y"+String.valueOf(CncState.absolute_Y));
+                    aktuelley.repaint();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -148,7 +187,14 @@ public class ControlPanel extends JPanel implements ChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    instructions.moveAxis("Y", schrittweite * (-1));
+                    if(schrittweite <= CncState.absolute_Y){
+                        instructions.moveAxis("Y", schrittweite * (-1));
+                        aktuelley.setText("Y" + String.valueOf(CncState.absolute_Y));
+                        aktuelley.repaint();
+                    }else{
+                        JOptionPane.showMessageDialog(header, "Y-Wert darf nicht negativ sein. Bitte kleinere Schrittweite wählen",
+                                "CNC-Steuerung", JOptionPane.ERROR_MESSAGE);
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -172,6 +218,8 @@ public class ControlPanel extends JPanel implements ChangeListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     instructions.moveAxis("Z", schrittweite * (-1));
+                    aktuellez.setText("Z"+String.valueOf(CncState.absolute_Z));
+                    aktuellez.repaint();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -195,6 +243,8 @@ public class ControlPanel extends JPanel implements ChangeListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     instructions.moveAxis("Z", schrittweite);
+                    aktuellez.setText("Z"+String.valueOf(CncState.absolute_Z));
+                    aktuellez.repaint();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -218,9 +268,19 @@ public class ControlPanel extends JPanel implements ChangeListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     if (pruefer == 0){
+                        ImageIcon drehenIcon = new ImageIcon(getClass().getResource("drehengruen.png"));
+                        Image drehenBild = drehenIcon.getImage();
+                        Image skaliertDrehen = drehenBild.getScaledInstance(130, 130,  java.awt.Image.SCALE_SMOOTH);
+                        drehenIcon = new ImageIcon(skaliertDrehen);
+                        drehen.setIcon(drehenIcon);
                         instructions.startTool(geschwindigkeit);
                         pruefer = 1;
                     } else if (pruefer == 1){
+                        ImageIcon drehenIcon = new ImageIcon(getClass().getResource("drehenrot.png"));
+                        Image drehenBild = drehenIcon.getImage();
+                        Image skaliertDrehen = drehenBild.getScaledInstance(130, 130,  java.awt.Image.SCALE_SMOOTH);
+                        drehenIcon = new ImageIcon(skaliertDrehen);
+                        drehen.setIcon(drehenIcon);
                         instructions.stopTool();
                         pruefer = 0;
                     }
@@ -229,7 +289,7 @@ public class ControlPanel extends JPanel implements ChangeListener {
                 }
             }
         });
-        ImageIcon drehenIcon = new ImageIcon(getClass().getResource("drehen.png"));
+        ImageIcon drehenIcon = new ImageIcon(getClass().getResource("drehenrot.png"));
         Image drehenBild = drehenIcon.getImage();
         Image skaliertDrehen = drehenBild.getScaledInstance(130, 130,  java.awt.Image.SCALE_SMOOTH);
         drehenIcon = new ImageIcon(skaliertDrehen);
@@ -237,6 +297,7 @@ public class ControlPanel extends JPanel implements ChangeListener {
         drehen.setBorderPainted(false);
         drehen.setFocusPainted(false);
         drehen.setContentAreaFilled(false);
+        drehen.setToolTipText("Fräskopf ein/ausschalten");
         constraints.gridx = 5;
         constraints.gridy = 2;
         add(drehen,constraints);
@@ -275,6 +336,7 @@ public class ControlPanel extends JPanel implements ChangeListener {
         constraints.gridx = 7;
         constraints.gridy = 5;
         add(back,constraints);
+
     }
 
 

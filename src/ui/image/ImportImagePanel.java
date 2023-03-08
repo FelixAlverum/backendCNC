@@ -31,7 +31,7 @@ public class ImportImagePanel extends JPanel {
         JPanel importImage = new JPanel();
         importImage.setLayout(new BoxLayout(importImage, BoxLayout.LINE_AXIS));
         importImage.add(Box.createHorizontalBox());
-        importImage.setBackground(Color.PINK);
+        importImage.setBackground(Color.GRAY);
         importImage.setBorder(new LineBorder(Color.GRAY, 5));
 
         JButton back = new JButton(new AbstractAction() {
