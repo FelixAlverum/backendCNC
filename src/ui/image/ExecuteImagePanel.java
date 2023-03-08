@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 
 public class ExecuteImagePanel extends JPanel {
     private GridBagConstraints gbc;
+    JLabel bild = new JLabel();
+    ImportImagePanel test = new ImportImagePanel();
 
     public ExecuteImagePanel() {
         setLayout(new GridBagLayout());
@@ -44,7 +46,8 @@ public class ExecuteImagePanel extends JPanel {
         fraesen.setMaximumSize(new Dimension(200, 200));
         executeImage.add(fraesen);
 
-
+        bild.setIcon(test.bildLaden.getIcon());
+        bild.repaint();
         add(executeImage, gbc);
     }
 }
