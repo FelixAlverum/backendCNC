@@ -31,7 +31,7 @@ public class ImportImagePanel extends JPanel {
         JPanel importImage = new JPanel();
         importImage.setLayout(new BoxLayout(importImage, BoxLayout.LINE_AXIS));
         importImage.add(Box.createHorizontalBox());
-        importImage.setBackground(Color.GRAY);
+        importImage.setBackground(Color.PINK);
         importImage.setBorder(new LineBorder(Color.GRAY, 5));
 
         JButton back = new JButton(new AbstractAction() {
@@ -73,6 +73,7 @@ public class ImportImagePanel extends JPanel {
                             if (bildAuswahl.getWidth() > (int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75) || bildAuswahl.getHeight() > (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75)) {
                                 JOptionPane.showMessageDialog(bildLaden, "Bild ist zu groß zum Einfügen, bitte ein kleineres Bild auswählen. Maximal " + (int)(Toolkit. getDefaultToolkit(). getScreenSize().getWidth()*0.75) + " x " + (int)(Toolkit. getDefaultToolkit(). getScreenSize().getHeight()*0.75) + " px groß.",
                                         "Bild-Import", JOptionPane.ERROR_MESSAGE);
+
                             } else {
                                 bildLaden.repaint();
                                 bildLaden.setIcon(new ImageIcon(dimg));
