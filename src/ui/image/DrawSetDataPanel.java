@@ -14,7 +14,7 @@ import ui.image.DrawPanel;
 
 public class DrawSetDataPanel<WindowEvent> extends JPanel{
     private GridBagConstraints gbc;
-    private JLabel imagejuhu;
+    private JLabel imagejuhu = new JLabel();
     private GridBagConstraints constraintsjuhu;
     private ImageIcon iconjuhu;
 
@@ -29,22 +29,33 @@ public class DrawSetDataPanel<WindowEvent> extends JPanel{
     public void initDrawSetDataPanel(){
         constraintsjuhu.gridx = 5;
         constraintsjuhu.gridy = 0;
-        JPanel drawSetDataPanel = new JPanel();
-        drawSetDataPanel.setLayout(new BoxLayout(drawSetDataPanel, BoxLayout.LINE_AXIS));
-        drawSetDataPanel.setBackground(Color.GRAY);
-        drawSetDataPanel.setBorder(new LineBorder(Color.GRAY, 5));
+        JPanel DrawSetDataPanel = new JPanel();
+        DrawSetDataPanel.setLayout(new BoxLayout(DrawSetDataPanel, BoxLayout.LINE_AXIS));
+        DrawSetDataPanel.setBackground(Color.GRAY);
+        DrawSetDataPanel.setBorder(new LineBorder(Color.GRAY, 5));
+        imagejuhu.setLayout(new BoxLayout(imagejuhu, BoxLayout.LINE_AXIS));
+        imagejuhu.setBackground(Color.GRAY);
+        imagejuhu.setBorder(new LineBorder(Color.GRAY, 5));
         // "./src/Test/DrawPanelSVG.svg"
         try {
-            TimeUnit.SECONDS.sleep(1);
+            //DrawPanel test = new DrawPanel();
+            //TimeUnit.SECONDS.sleep(1);
             System.out.println("INIT");
             //BufferedImage imgjuhu = (BufferedImage) DrawPanel.image;
             //Image juhumann = imgjuhu.getScaledInstance(imgjuhu.getWidth(), imgjuhu.getHeight(),Image.SCALE_SMOOTH);
             //ImageIcon iconjuhu = new ImageIcon(juhumann);
-            imagejuhu.setIcon(new ImageIcon(DrawPanel.image));
-            imagejuhu.repaint();
+            //imagejuhu.setIcon(new ImageIcon(DrawPanel.uebergabeBild.getScaledInstance(test.getHeight(), test.getWidth(), Image.SCALE_SMOOTH)));
+            //imagejuhu.repaint();
         }catch (Exception exception){
             exception.printStackTrace();
         }
+        imagejuhu.setVisible(true);
+        DrawSetDataPanel.add(imagejuhu);
+        imagejuhu.setIcon(new ImageIcon("/src/ui/image/DrawPanelPNG.png"));
+        add(DrawSetDataPanel, gbc);
     }
 
+    public void add(ImageIcon testIcon) {
+        System.out.println(imagejuhu);
+        imagejuhu.setIcon(new ImageIcon("/src/ui/image/DrawPanelPNG.png"));    }
 }

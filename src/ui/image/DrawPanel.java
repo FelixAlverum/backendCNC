@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +33,7 @@ public class DrawPanel extends JPanel {
 
     private Point lastPoint;
     public static Image image;
+    public static Image uebergabeBild;
     private Graphics2D g2d;
 
 
@@ -294,19 +296,19 @@ public class DrawPanel extends JPanel {
         footerPanel.add(savePNG);
 
         JButton next = new JButton(new AbstractAction() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ImageIO.write((RenderedImage) image, "png", new File("./src/Test/testguy.png"));
-                    TimeUnit.SECONDS.sleep(1);
-                    DrawSetDataPanel testo = new DrawSetDataPanel<>();
-                    testo.initDrawSetDataPanel();
-                    UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.DRAW_SET_DATA_PANEL);
+                    if (ImageIO.write((RenderedImage) image, "png", new File("src/ui/image/DrawPanelPNG.png"))) {
+                        System.out.println("-- gespeichert");
+                    }
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
+                    ex.printStackTrace();
                 }
+                DrawSetDataPanel test = new DrawSetDataPanel();
+                UI_CONST.cardLayout.show(UI_CONST.showPanel, UI_CONST.DRAW_SET_DATA_PANEL);
+                test.initDrawSetDataPanel();
             }
         });
         next.setText("Weiter");
