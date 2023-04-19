@@ -1,6 +1,7 @@
 package cnc.cnc_instructions;
 
 import cnc.CncState;
+import cnc.HierParameterEinstellen;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +24,7 @@ public class Parser {
         // https://stackoverflow.com/questions/26027313/how-to-load-and-parse-svg-documents
 
         // TODO in CNC State übertragen und im Frontend eintragen --> Vielleicht als Virtuelen Nullpunkt setzen
-        int offsetWerkstueckAufCncX = 40000, offsetWerkstueckAufCncY = 20000, offsetWerkstueckAufCncZ = 0;
+        int offsetWerkstueckAufCncX = HierParameterEinstellen.x, offsetWerkstueckAufCncY = HierParameterEinstellen.y, offsetWerkstueckAufCncZ = 0;
 
         try {
             String contentSVG = Files.readString(Path.of("src/Test/DrawPanelSVG.svg"));
@@ -57,8 +58,8 @@ public class Parser {
 
             // Resize coordinates
             // TODO Angabe über Frontend - Workpart in mm
-            CncState.workpart_width = 280;
-            CncState.workpart_length = 380;
+            CncState.workpart_width = HierParameterEinstellen.werkstueckbreite;
+            CncState.workpart_length = HierParameterEinstellen.werkstuecklaenge;
             CncState.workpart_depth = 5;
 
 

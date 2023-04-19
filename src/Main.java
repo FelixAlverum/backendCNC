@@ -1,4 +1,5 @@
 import cnc.CncState;
+import cnc.HierParameterEinstellen;
 import cnc.cnc_instructions.Instructions;
 import cnc.cnc_instructions.Parser;
 import com.fazecast.jSerialComm.SerialPort;
@@ -61,8 +62,8 @@ public class Main {
 
         i.startTool(20000);
 
-        i.goCoordinate(40000,20000,130000);
-        i.goCoordinate(40000,20000,142300);
+        i.goCoordinate(HierParameterEinstellen.x,HierParameterEinstellen.y,HierParameterEinstellen.z - 1 * 1000 * 10);
+        i.goCoordinate(HierParameterEinstellen.x,HierParameterEinstellen.y,HierParameterEinstellen.z);
 
         for (int[] koordinate:gcode) {
             if (koordinate[0] == -1){

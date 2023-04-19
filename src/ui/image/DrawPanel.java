@@ -239,7 +239,7 @@ public class DrawPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    //ImageIO.write((RenderedImage) image, "png", new File("./src/Test/DrawPanelPNG.png"));
+                    ImageIO.write((RenderedImage) image, "png", new File("./src/Test/DrawPanelPNG.png"));
 
                     // TODO Tweek Options
                     HashMap<String, Float> options = new HashMap<String, Float>();
