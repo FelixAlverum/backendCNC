@@ -1,16 +1,11 @@
 import cnc.CncState;
-import cnc.HierParameterEinstellen;
 import cnc.cnc_instructions.Instructions;
 import cnc.cnc_instructions.Parser;
-import com.fazecast.jSerialComm.SerialPort;
 import connection.cnc.SerialAPI;
 import jankovicsandras.imagetracer.ImageTracer;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws Exception {

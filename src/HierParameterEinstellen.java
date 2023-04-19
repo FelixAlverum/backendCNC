@@ -1,5 +1,3 @@
-package cnc;
-
 public class HierParameterEinstellen {
 
     // ------------------- Startpunkt des Werkstücks -------------------

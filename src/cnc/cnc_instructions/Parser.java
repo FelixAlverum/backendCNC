@@ -1,15 +1,12 @@
 package cnc.cnc_instructions;
 
 import cnc.CncState;
-import cnc.HierParameterEinstellen;
+import HierParameterEinstellen;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Parser {
     /**
